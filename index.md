@@ -3,12 +3,19 @@ layout: about
 permalink: /
 profile:
   align: right
-  image: profile.png
+  image: profile.jpg
 published: true
 ---
 
-[Gradfolio](https://github.com/jitinnair1/gradfolio){:target="_blank"} is a responsive, dark-mode ready Jekyll theme designed keeping academia in mind. The easiest way to install the theme is to fork it using GitHub. Check the README file for [instructions](https://github.com/jitinnair1/gradfolio#installation){:target="_blank"}.
+A highly motivated researcher/ system designer/ mechatronics engineer, fan of open source manifestation, part time maker, robotic lover, AI and ML enthusiast, I do love puzzles and challenges. Currently looking for exciting PhD positions
 
-If you want to use this space to write your biography here, edit the `index.md` file. You can put a picture in, too. Rename your picture to `profile.png` and put it in the `assets/images/` folder.
+## Interests
+Complex systems, Cyber physical systems, System engineering
+Robotics, Artificial intelligence, Machine learning
 
-The social-icons footer can be used to link profiles from GitHub, OrcID and ReasearchGate aprart form the usual Twitter, LinkedIn and Facebook. You can add your user ID in the `_config.yml` file to link your accounts.
+## Skills
+**Programming**: python, matlab, C, C++, fortran
+**Hardware**: Arduino, Raspberry pi, STM32
+**Software**: ROS, linux, OpenCV, Tensorflow, keras, Git, Latex, Solidworks
+**Soft skills**: Critical thinking, Systematic thinking, R&D team leadership, 
+**language**: English, Farsi
