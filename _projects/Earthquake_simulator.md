@@ -1,11 +1,9 @@
 ---
 layout: post
 title: Earthquake simulator
-description: P-wave earthquake simulator
+description: A P-wave earthquake simulator
 ---
 
-
-# Earthquake simulator
 ## Intro
 Earthquake is always capable of causing catastrophic events, especially in developing countries due to poor structured houses and infrastructures. Many researchers developed systems to minimize the probable harm caused by the earthquake, and early warning systems are one. These systems implement artificial intelligence and pattern recognition techniques to predict the propagation of earthquake waves and send proper notifications through GSM or other similar networks.
 In Advanced Robotics and Intelligent Systems Lab, a similar system was under development for earthquake early warning. They take advantage of the popularity of smartphones and their embedded sensors to collect anonymous data to predict if an earthquake is happening and in which direction it's going to propagate.
