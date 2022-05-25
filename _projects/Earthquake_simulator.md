@@ -1,3 +1,10 @@
+---
+layout: post
+title: Earthquake simulator
+description: 
+---
+
+
 # Earthquake simulator
 ## Intro
 Earthquake is always capable of causing catastrophic events, especially in developing countries due to poor structured houses and infrastructures. Many researchers developed systems to minimize the probable harm caused by the earthquake, and early warning systems are one. These systems implement artificial intelligence and pattern recognition techniques to predict the propagation of earthquake waves and send proper notifications through GSM or other similar networks.
