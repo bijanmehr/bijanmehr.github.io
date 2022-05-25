@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Earthquake simulator
-description: 
+description: P-wave earthquake simulator
 ---
 
 
