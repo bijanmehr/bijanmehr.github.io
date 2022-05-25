@@ -17,7 +17,7 @@ Complex Systems, Cyber Physical Systems, System Engineering, Cyber Security, Rob
 - **Programming**: python, matlab, C, C++, fortran
 - **Hardware**: Arduino, Raspberry pi, STM32
 - **Software**: ROS, linux, OpenCV, Tensorflow, keras, Git, Latex, Solidworks
-- **Soft skills**: Critical thinking, Systematic thinking, R&D team leadership, 
+- **Soft skills**: Critical thinking, Systematic thinking, R&D team leadership
 - **language**: English, Farsi
 
 ### [Download my CV](https://bijanmehr.github.io/assets/files/bijanmehr_cv.pdf)
