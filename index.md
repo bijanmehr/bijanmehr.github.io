@@ -19,3 +19,5 @@ Complex Systems, Cyber Physical Systems, System Engineering, Cyber Security, Rob
 - **Software**: ROS, linux, OpenCV, Tensorflow, keras, Git, Latex, Solidworks
 - **Soft skills**: Critical thinking, Systematic thinking, R&D team leadership, 
 - **language**: English, Farsi
+
+### Download my CV
