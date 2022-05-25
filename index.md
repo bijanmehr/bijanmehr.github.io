@@ -20,4 +20,4 @@ Complex Systems, Cyber Physical Systems, System Engineering, Cyber Security, Rob
 - **Soft skills**: Critical thinking, Systematic thinking, R&D team leadership, 
 - **language**: English, Farsi
 
-### Download my CV
+### [Download my CV](https://bijanmehr.github.io/assets/files/bijanmehr_cv.pdf)
