@@ -19,8 +19,8 @@ paginate_path: /blog/page:num/
 # Social media links in footer
 facebook: 
 twitter: 
-linkedin: "https://www.linkedin.com/in/bijanmehr/"
-github: "https://github.com/bijanmehr"
+linkedin: "bijanmehr"
+github: "bijanmehr"
 researchgate: 
 orcid: 
 
