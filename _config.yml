@@ -1,7 +1,7 @@
 ### your site title here
 
-title: Your Name
-description: subtitle | affiliations | motto
+title: Bijan Mehr
+description: Researcher|System designer|Mechatronics engineer
 
 baseurl: #/gradfolio #name of GitHub repository
 url: "https://bijanmehr.github.io" #custom url to be used instead of GitHub repository
@@ -17,12 +17,12 @@ permalink: /blog/:year/:title/
 paginate_path: /blog/page:num/
 
 # Social media links in footer
-facebook: "#"
-twitter: "#"
-linkedin: "#"
-github: "#"
-researchgate: "#"
-orcid: "#"
+facebook: 
+twitter: 
+linkedin: "https://www.linkedin.com/in/bijanmehr/"
+github: "https://github.com/bijanmehr"
+researchgate: 
+orcid: 
 
 highlighter: rouge
 markdown: kramdown
