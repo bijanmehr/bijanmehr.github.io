@@ -11,14 +11,29 @@ The home-based IoT devices such as the intelligent toy car were designed to perf
 
 This project redesigned and improved the intelligent toy car functionality by adding shaft encoders to detect attention to detail and interest in rotating objects in children with ASD. Also, we improved our classification system by implementing two modalities to detect different ASD symptoms that enhanced our previous accuracy by more than 10%
 
+|![car](https://bijanmehr.github.io/assets/intelligent_car/car_axis.png)|
+|:-:|
+|The intelligent toy car 2.0|
+
 ## System design
 The intelligent toy car is designed to capture the signs of two major symptoms in children with ASD, obsessive attention to detail and repetitive behaviors. In our first design, a Wii remote, which includes an accelerometer, was placed in the car. Our new design has an inexpensive IoT board ESP8266 NodeMCU to read sensor data and send them wirelessly through Wi-Fi via UDP protocol to ensure maximum data collection rate. Also, the cheap MEMS accelerometer ADXL345 is placed inside the car, and two magnetic shaft encoders are installed on each car's axle. The whole system runs on a battery, and all electronic parts are embedded inside the car deliberately to avoid any distraction.
 
 The intelligent toy car firmware is based on the Arduino ecosystem to make future R&D more effortless. Also, a ROS (Robotic Operating System) package is developed for interfacing with the system, making integrating the intelligent toy car in other systems more straightforward.
 
+|![schematic](https://bijanmehr.github.io/assets/intelligent_car/car_diagram.png)|
+|:-:|
+|System diagram|
+
 ## Tests and results
 The data collection process took place in an ASD center under the supervision of a psychiatrist and an ASD expert. The collected data consists of timestamps, X, Y, and Z-axis accelerations, and the number of rotations of each wheel shaft.
 We applied two different strategies to the acquired dataset. First, based on frequency domain analysis, the data was divided into four chunks, NOT PLAYING, ONLY PLAYING WITH WHEELS, MOVING CAR ON THE GROUND, and MOVE THE CAR IN THE AIR, then used the ratio of each chunk for classification. The other method was based on an SVM classifier. We extracted multiple features based on our observations and the experts' opinions. Then by utilizing feature reduction methods like backward elimination, we chose the most compelling features for SVM with a linear kernel. The classifier showed promising results, and by combining both modalities, the system handled classification with the accuracy of 85%
+
+|          **Features**          |                     **Description**                     |
+|:------------------------------:|:-------------------------------------------------------:|
+|        not playing ratio       |        the ratio of not playing to total playtime       |
+| playing only with wheels ratio | the ratio of playing only with wheels to total playtime |
+|   playing on the ground ratio  |   the ratio of playing on the ground to total playtime  |
+|    playing in the air ratio    |    the ratio of playing in the air to total playtime    |
 
 ## Discussion
 The intelligent toy car was the most time-intensive study for us. We developed IoT systems, built toy cars (it was way harder than you can imagine!), dealt with real-world data collection difficulties, analyzed noisy behavioral data, got in touch with families with ASD children, and talked to many ASD experts. The experience was unique for every member of our team and the most challenging task for me as a team leader.
