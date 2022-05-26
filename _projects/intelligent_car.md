@@ -28,12 +28,14 @@ The intelligent toy car firmware is based on the Arduino ecosystem to make futur
 The data collection process took place in an ASD center under the supervision of a psychiatrist and an ASD expert. The collected data consists of timestamps, X, Y, and Z-axis accelerations, and the number of rotations of each wheel shaft.
 We applied two different strategies to the acquired dataset. First, based on frequency domain analysis, the data was divided into four chunks, NOT PLAYING, ONLY PLAYING WITH WHEELS, MOVING CAR ON THE GROUND, and MOVE THE CAR IN THE AIR, then used the ratio of each chunk for classification. The other method was based on an SVM classifier. We extracted multiple features based on our observations and the experts' opinions. Then by utilizing feature reduction methods like backward elimination, we chose the most compelling features for SVM with a linear kernel. The classifier showed promising results, and by combining both modalities, the system handled classification with the accuracy of 85%
 
-|          **Features**          |                     **Description**                     |
-|:------------------------------:|:-------------------------------------------------------:|
-|        not playing ratio       |        the ratio of not playing to total playtime       |
-| playing only with wheels ratio | the ratio of playing only with wheels to total playtime |
-|   playing on the ground ratio  |   the ratio of playing on the ground to total playtime  |
-|    playing in the air ratio    |    the ratio of playing in the air to total playtime    |
+
+|                      **Classifier**                     | **Accuracy** | **Sensitivity** | **Specificity** | **precision** |
+|:-------------------------------------------------------:|:------------:|:---------------:|:---------------:|:-------------:|
+|                    Baseline features                    |     71.11    |      67.14      |      73.00      |     80.00     |
+|              Baseline and encoder features              |     78.61    |      75.00      |      68.00      |     87.50     |
+|          Baseline and new acceleration feature          |     75.83    |      65.48      |      77.00      |     64.00     |
+| Baseline, encoder features and new acceleration feature |   **85.56**  |      81.67      |      81.00      |     87.67     |
+
 
 ## Discussion
 The intelligent toy car was the most time-intensive study for us. We developed IoT systems, built toy cars (it was way harder than you can imagine!), dealt with real-world data collection difficulties, analyzed noisy behavioral data, got in touch with families with ASD children, and talked to many ASD experts. The experience was unique for every member of our team and the most challenging task for me as a team leader.
