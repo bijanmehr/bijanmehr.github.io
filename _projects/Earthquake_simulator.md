@@ -9,7 +9,7 @@ description: A P-wave earthquake simulator
 Earthquake is always capable of causing catastrophic events, especially in developing countries due to poor structured houses and infrastructures. Many researchers developed systems to minimize the probable harm caused by the earthquake, and early warning systems are one. These systems implement artificial intelligence and pattern recognition techniques to predict the propagation of earthquake waves and send proper notifications through GSM or other similar networks.
 
 
-|![schematic](assets/earthquack_simulator/schematic.png)|
+|![schematic](https://bijanmehr.github.io/assets/earthquack_simulator/schematic.png)|
 |:-:|
 |[Esposito, M., Palma, L., Belli, A., Sabbatini, L., & Pierleoni, P. (2022). Recent Advances in Internet of Things Solutions for Early Warning Systems: A Review. Sensors, 22(6), 2124.](https://doi.org/10.3390/s22062124)
 |
@@ -26,13 +26,13 @@ We decided to use simple and cost-effective linear bearings with stainless steel
 
 We provide a Matlab interface and an Arduino PID speed controller to control the system, so the users can quickly achieve their desirable motion profile.
 
-|![cad_model](assets/earthquack_simulator/solid.png)|![prototype](assets/earthquack_simulator/prototype.png)|
+|![cad_model](https://bijanmehr.github.io/assets/earthquack_simulator/solid.png)|![prototype](https://bijanmehr.github.io/assets/earthquack_simulator/prototype.png)|
 |:-:|:-:|
 
 ## Test and data collection
 The speed controller system takes motor PWM as feed-forward and the optical encoder data as feedback. We also design a data acquisition system that records vibration data for each time frame. The DAQ system sensor module is a Piezo Vibration Sensor with high voltage sensitivity and up to 40hz operational frequency that far exceeded our requirements. We manage to collect multiple sets of data for different accelerations values and motion profiles. By applying Matlab's system identification tools at our disposal, we come to a crude model of our system and its active damper model accordingly.
 
-|![sytem_function](assets/earthquack_simulator/tf.png)|
+|![sytem_function](https://bijanmehr.github.io/assets/earthquack_simulator/tf.png)|
 |:-:|
 |active damping model|
 
