@@ -35,6 +35,10 @@ The Matlab interface provides a simple GUI for drawing a path and a simulation t
 The ESP8266 receives checkpoints and saves them on an array. In the meantime, after receiving multiple checkpoints, the navigation module generates a path based on given checkpoints and sends it as the motor command to Arduino.
 The Arduino motor controller is based on a PI controller that implements a closed-loop velocity control based on PWM data on feed-forward and encoder data on feedback to minimize draft from the desired path.
 
+|![diagram](https://bijanmehr.github.io/assets/babytank/diagram.png)|
+|:-:|
+|Software diagram|
+
 ## Discussion
 We managed to prototype three versions in this project and were inspired by many great designs, such as the donkey cars and Epuck robots. We built and failed many times as expected. Though our few tests on typically developed children show their interest in our system, we stopped further developments due to financial issues.
 
