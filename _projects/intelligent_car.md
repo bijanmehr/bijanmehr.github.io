@@ -29,12 +29,12 @@ The data collection process took place in an ASD center under the supervision of
 We applied two different strategies to the acquired dataset. First, based on frequency domain analysis, the data was divided into four chunks, NOT PLAYING, ONLY PLAYING WITH WHEELS, MOVING CAR ON THE GROUND, and MOVE THE CAR IN THE AIR, then used the ratio of each chunk for classification. The other method was based on an SVM classifier. We extracted multiple features based on our observations and the experts' opinions. Then by utilizing feature reduction methods like backward elimination, we chose the most compelling features for SVM with a linear kernel. The classifier showed promising results, and by combining both modalities, the system handled classification with the accuracy of 85%
 
 
-|                      **Classifier**                     | **Accuracy** | **Sensitivity** | **Specificity** | **precision** |
-|:-------------------------------------------------------:|:------------:|:---------------:|:---------------:|:-------------:|
-|                    Baseline features                    |     71.11    |      67.14      |      73.00      |     80.00     |
-|              Baseline and encoder features              |     78.61    |      75.00      |      68.00      |     87.50     |
-|          Baseline and new acceleration feature          |     75.83    |      65.48      |      77.00      |     64.00     |
-| Baseline, encoder features and new acceleration feature |   **85.56**  |      81.67      |      81.00      |     87.67     |
+| **Classifier**                                          	| **Accuracy** 	| **Sensitivity** 	| **Specificity** 	| **precision** 	|
+|---------------------------------------------------------	|--------------	|-----------------	|-----------------	|---------------	|
+| Baseline features                                       	| 71.11        	| 67.14           	| 73.00           	| 80.00         	|
+| Baseline and encoder features                           	| 78.61        	| 75.00           	| 68.00           	| 87.50         	|
+| Baseline and new acceleration feature                   	| 75.83        	| 65.48           	| 77.00           	| 64.00         	|
+| Baseline, encoder features and new acceleration feature 	| **85.56**    	| 81.67           	| 81.00           	| 87.67         	|
 
 
 ## Discussion
