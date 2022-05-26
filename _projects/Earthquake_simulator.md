@@ -28,7 +28,7 @@ We provide a Matlab interface and an Arduino PID speed controller to control the
 
 |![cad_model](https://bijanmehr.github.io/assets/earthquack_simulator/solid.png)|![prototype](https://bijanmehr.github.io/assets/earthquack_simulator/prototype.png)|
 |:-:|:-:|
-|||
+|CAD model|Prototype|
 
 ## Test and data collection
 The speed controller system takes motor PWM as feed-forward and the optical encoder data as feedback. We also design a data acquisition system that records vibration data for each time frame. The DAQ system sensor module is a Piezo Vibration Sensor with high voltage sensitivity and up to 40hz operational frequency that far exceeded our requirements. We manage to collect multiple sets of data for different accelerations values and motion profiles. By applying Matlab's system identification tools at our disposal, we come to a crude model of our system and its active damper model accordingly.
