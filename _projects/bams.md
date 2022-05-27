@@ -36,7 +36,7 @@ The interaction module is based on an Android tablet that presents the robot's f
 
 |![BAMS3_skematic](https://bijanmehr.github.io/assets/bams/bams3_schematic.png)|
 |:-:|
-|BAMS 3.0 movement module|
+|BAMS 3.0|
 
 ## Discussion
 The BAMS series was a unique experience for my team due to its long and progressive timeline requiring multiple developments and redesign stages. The BAMS 3 is now operational in Advanced Robotics and Intelligent Systems Lab at the University of Tehran, and it's going to be tested in rehabilitation scenarios for children with ASD.
@@ -45,4 +45,4 @@ We hope to open-source all CAD files and source codes soon after publishing our 
 
 |![BAMS3](https://bijanmehr.github.io/assets/bams/bams3.png)|
 |:-:|
-|BAMS 3.0|
+|BAMS 3.0 interactions|
