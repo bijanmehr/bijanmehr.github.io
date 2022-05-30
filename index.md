@@ -23,7 +23,7 @@ Complex Systems, Cyber Physical Systems, System Engineering, Cyber Security, Rob
   - [Multi modal ASD screening system](https://bijanmehr.github.io/projects/mmass/)
   - Fully Robotic Social Environment - Teaching and Practicing Affective Interaction for children with ASD
   - [Intelligent toy car - ASD screening using multi modal features](https://bijanmehr.github.io/projects/intelligent_car/)
-  - Robotic Social Environments - A promising platform for autism therapy
+  - [Robotic Social Environments - A promising platform for autism therapy](https://doi.org/10.1007/978-3-030-62056-1_20)
 
 ## Publications
 
