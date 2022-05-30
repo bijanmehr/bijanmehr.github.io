@@ -4,6 +4,10 @@ title: Multi-modal autism screening system
 description: A Multi-modal approach to comprehensively ASD screening
 ---
 
+|![overview](https://bijanmehr.github.io/assets/mmass/overview.png)|
+|:-:|
+|system overview|
+
 ## Intro
 
 Every 1 out of 160 children has Autism spectrum disorder; even though there is no treatment for ASD, early rehabilitation improves the patient condition significantly. Autism has multiple symptoms that every child could experience with different severity. Although ASD could be diagnosed at six months, technical difficulties lead to time-consuming and expensive sessions due to complicated behavioral symptoms.
@@ -21,13 +25,25 @@ We chose three more common symptoms of ASD: the deficit in social interactions, 
 Roboparrot is a parrot-like robot that was developed for human-robot interaction scenarios. Its previous versions were tested multiple times for ASD rehabilitation and screening. We developed Roboparrot 3.0 and made it compatible with ROS (Robotic Operating System).
 Roboparrot can blink, open, and close its beak, move its body, and talk through a speaker.
 
+|![ROS_diagram](https://bijanmehr.github.io/assets/mmass/roboparrot_diagram.png)|
+|:-:|
+|Roboparrot 3.0 diagram|
+
 ### Intelligent toy car
 
 The intelligent toy car is redesigned and developed to analyze the playing pattern of the children. The embedded sensors collect accelerations along the X, Y, and Z-axis and the number of wheel rotations for each timestamp.
 
+|![ROS_diagram](https://bijanmehr.github.io/assets/mmass/car_diagram.png)|
+|:-:|
+|Intelligent toy car diagram|
+
 ### Lightwheel
 
 Lightwheel is developed for uncommon sensory input reactions based on the ASD experts' opinions. Children with ASD usually show an unusual interest in rotating objects, and also they have a tendency to bright lights. The Lightwheel tried to combine these two symptoms for ASD screening. The Lightwheel is 6 RGB LED strips placed in a circular pattern, and the periodic turning on and off makes the required sense of motion.
+
+|![ROS_diagram](https://bijanmehr.github.io/assets/mmass/lightwheel.png)|
+|:-:|
+|Lightwheel and the system control boad|
 
 ### Intelligent ASD questionnaire
 
@@ -40,6 +56,10 @@ ROS plays a pivotal role in integrating all modules, so a ROS interface was deve
 For privacy reasons, the system assigns a unique id for each user, that the data logging process proceeds based on that. Also, all recorded data like videos are saved locally, and after processing the raw videos and extracting essential features, the recorded videos were deleted.
 
 After 15 to 20 minutes of interaction with the MMASS(multi-modal autism screening system), the intelligent toy car data, the video of Roboparrot child interaction, and the Lightwheel child interaction video were captured. Also, in the middle of this process, it was asked from the child's parents to fill out the questionnaire.
+
+|![ROS_diagram](https://bijanmehr.github.io/assets/mmass/ROS_diagram.png)|
+|:-:|
+|system ROS diagram|
 
 ## Data collection and processing
 
