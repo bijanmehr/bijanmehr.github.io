@@ -1,6 +1,6 @@
 ---
 layout: post
-title: BAMS - Interactive Social Robot Platform 
+title: BAMS Social Robot Platform 
 description: Interactive Social Robot Platform for ASD rehabilitation
 ---
 
