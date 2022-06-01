@@ -10,7 +10,7 @@ published: true
 A highly motivated researcher/ system designer/ mechatronics engineer, fan of open source manifestation, part time maker, robotic lover, AI and ML enthusiast, I do love puzzles and challenges. Currently looking for exciting PhD positions
 
 ## Interests
-Complex Systems, Cyber Physical Systems, System Engineering, Cyber Security, Robotics, Autonomous Systems, Computer Vision, AI, ML
+Complex Systems, Cyber-physical System, System Engineering, Cyber Security, Robotics, Autonomous Systems, Computer Vision, AI, ML
 
 ## Education
 
@@ -38,10 +38,11 @@ Complex Systems, Cyber Physical Systems, System Engineering, Cyber Security, Rob
 
 ## Skills
 
-- **Programming**: python, matlab, C, C++, fortran
-- **Hardware**: Arduino, Raspberry pi, STM32
-- **Software**: ROS, linux, OpenCV, Tensorflow, keras, Git, Latex, Solidworks
-- **Soft skills**: Critical thinking, Systematic thinking, R&D team leadership
-- **language**: English, Farsi
+- **Programming**: Python, C, C++, Matlab, Bash, Fortran
+- **Frameworks**: ROS, Scikit, OpenCV, TensorFlow, Keras, Django, Flask
+- **Tools**: GIT, Solidworks, AutoCAD, 3D print softwares
+- **Platforms**: Linux, Arduino, Raspberry, Nvidia Jetson, STM32
+- **Soft Skills**: Critical thinking, R&D team leadership, Systematic thinking
+- **Language**: English (Proficient), Farsi (Native)
 
 ### [Download my CV](https://bijanmehr.github.io/assets/files/bijanmehr_cv.pdf)

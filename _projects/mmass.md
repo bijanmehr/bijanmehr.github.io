@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Multi-modal autism screening system
-description: A Multi-modal approach to comprehensively ASD screening
+description: A Multi-modal approach for comprehensive ASD screening
 ---
 
 |![overview](https://bijanmehr.github.io/assets/mmass/overview.png)|
