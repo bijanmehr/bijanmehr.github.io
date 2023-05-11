@@ -7,10 +7,10 @@ profile:
 published: true
 ---
 
-A highly motivated researcher/ system designer/ mechatronics engineer, fan of open source manifestation, part time maker, robotic lover, AI and ML enthusiast, I do love puzzles and challenges. Currently looking for exciting PhD positions
+I'm a mechatronics engineer and roboticist with a passion for solving complex, real-world engineering problems in creative ways using my expertise in systems design and engineering. My love of puzzles and challenges inspires me to explore the cutting-edge of hardware and software integration, particularly in the exciting field of cyber-physical systems. With a hacker mindset, I enjoy using unconventional methods to tackle tough problems, whether it's through AI and ML techniques, hardware hacking, or designing innovative tools and gadgets. I'm a firm believer in the power of open-source collaboration, and I love sharing my knowledge and experience with others. I'm a self-directed learner and thrive on mastering new skills and technologies. Right now, I'm eager to take my career to the next level by starting my PhD as soon as possible.
 
 ## Interests
-Complex Systems, Cyber-physical System, System Engineering, Cyber Security, Robotics, Autonomous Systems, Computer Vision, AI, ML
+Complex Systems, Cyber-physical System, System Engineering, Robotics, Autonomous Systems, Computer Vision, AI, ML
 
 ## Education
 
@@ -27,14 +27,14 @@ Complex Systems, Cyber-physical System, System Engineering, Cyber Security, Robo
 
 ## Publications
 
+- [Sustainability](https://doi.org/10.3390/su15107790)
+  - **Mehralizadeh, B.**; Baradaran, B.; Nikkhoo, S.; Soleiman, P.; Moradi, H. A Sensorized Toy Car for Autism Screening Using Multi-Modal Features. Sustainability 2023, 15, 7790. https://doi.org/10.3390/su15107790
+
+- [Frontiers in Robotics and AI](https://doi.org/10.3389/frobt.2023.1088582)
+  - Soleiman P, Moradi H, **Mehralizadeh B**, Ameri H, Arriaga RI, Pouretemad HR, Baghbanzadeh N and Vahid LK (2023) Fully robotic social environment for teaching and practicing affective interaction: Case of teaching emotion recognition skills to children with autism spectrum disorder, a pilot study. Front. Robot. AI 10:1088582. doi: 10.3389/frobt.2023.1088582
+
 - [ICSR 2020](https://doi.org/10.1007/978-3-030-62056-1_20)
-  - Soleiman, P., Moradi, H., **Mehralizadeh, B.**, Azizi, N., Anjidani, F., Pouretemad, H. R., & Arriaga, R. I. (2020, November). Robotic Social Environments: A Promising Platform for Autism Therapy. In International Conference on Social Robotics (pp. 232-245). Springer, Cham.
-
-- under review
-  - Soleiman, P., Moradi, H., **Mehralizadeh, B.**, Ameri, H., Baghbanzadeh, N., Pouretemad, H. R., Arriaga, R. I. & Kashani, L. V. Fully Robotic Social Environment for Teaching and Practicing Aective Interaction: Case of teaching emotion recognition skill to children with autism
-
-- under review
-  - **Mehralizadeh, B.**, Baradaran, B., Nikkhoo, S., Soleiman, P. & Moradi, H. An Intelligent Toy Car for Autism Screening using Multi-Modal Features
+  - Soleiman, P., Moradi, H., **Mehralizadeh, B.**, Azizi, N., Anjidani, F., Pouretemad, H. R., & Arriaga, R. I. (2020, November). Robotic Social Environments: A Promising Platform for Autism Therapy. In: , et al. Social Robotics. ICSR 2020. Lecture Notes in Computer Science(), vol 12483. Springer, Cham. https://doi.org/10.1007/978-3-030-62056-1_20
 
 ## Skills
 
