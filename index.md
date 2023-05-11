@@ -21,7 +21,7 @@ Complex Systems, Cyber-physical System, System Engineering, Robotics, Autonomous
 
 - Research Assistant in Advanced Robotics and Intelligent Systems Lab University of tehran
   - [Multi modal ASD screening system](https://bijanmehr.github.io/projects/mmass/)
-  - Fully Robotic Social Environment - Teaching and Practicing Affective Interaction for children with ASD
+  - [Fully Robotic Social Environment - Teaching and Practicing Affective Interaction for children with ASD](https://doi.org/10.3389/frobt.2023.1088582)
   - [Intelligent toy car - ASD screening using multi modal features](https://bijanmehr.github.io/projects/intelligent_car/)
   - [Robotic Social Environments - A promising platform for autism therapy](https://doi.org/10.1007/978-3-030-62056-1_20)
 
