@@ -10,7 +10,7 @@ published: true
 I'm a mechatronics engineer and roboticist with a passion for solving complex, real-world engineering problems in creative ways using my expertise in systems design and engineering. My love of puzzles and challenges inspires me to explore the cutting-edge of hardware and software integration, particularly in the exciting field of cyber-physical systems. With a hacker mindset, I enjoy using unconventional methods to tackle tough problems, whether it's through AI and ML techniques, hardware hacking, or designing innovative tools and gadgets. I'm a firm believer in the power of open-source collaboration, and I love sharing my knowledge and experience with others. I'm a self-directed learner and thrive on mastering new skills and technologies. Right now, I'm eager to take my career to the next level by starting my PhD as soon as possible.
 
 ## Interests
-Complex Systems, Cyber-physical System, System Engineering, Robotics, Autonomous Systems, Computer Vision, AI, ML
+Complex Systems, Cyber-physical System, System Engineering, Robotics, System Resiliency, Computer Vision, AI, ML
 
 ## Education
 
@@ -22,7 +22,7 @@ Complex Systems, Cyber-physical System, System Engineering, Robotics, Autonomous
 - Research Assistant in Advanced Robotics and Intelligent Systems Lab University of tehran
   - [Multi modal ASD screening system](https://bijanmehr.github.io/projects/mmass/)
   - [Fully Robotic Social Environment - Teaching and Practicing Affective Interaction for children with ASD](https://doi.org/10.3389/frobt.2023.1088582)
-  - [Intelligent toy car - ASD screening using multi modal features](https://bijanmehr.github.io/projects/intelligent_car/)
+  - [Sensorized toy car - ASD screening using multi modal features](https://bijanmehr.github.io/projects/intelligent_car/)
   - [Robotic Social Environments - A promising platform for autism therapy](https://doi.org/10.1007/978-3-030-62056-1_20)
 
 ## Publications
