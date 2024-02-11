@@ -20,12 +20,15 @@ Complex Systems, Cyber-physical System, System Engineering, Robotics, System Res
 ## Research Experience
 
 - Research Assistant in Advanced Robotics and Intelligent Systems Lab University of tehran
-  - [Multi modal ASD screening system](https://bijanmehr.github.io/projects/mmass/)
+  - [Multi modal ASD screening system](https://doi.org/10.1109/ICRoM60803.2023.10412541)
   - [Fully Robotic Social Environment - Teaching and Practicing Affective Interaction for children with ASD](https://doi.org/10.3389/frobt.2023.1088582)
-  - [Sensorized toy car - ASD screening using multi modal features](https://bijanmehr.github.io/projects/intelligent_car/)
+  - [Sensorized toy car - ASD screening using multi modal features](https://doi.org/10.3390/su15107790)
   - [Robotic Social Environments - A promising platform for autism therapy](https://doi.org/10.1007/978-3-030-62056-1_20)
 
 ## Publications
+
+- [ICRoM 2023](https://doi.org/10.1109/ICRoM60803.2023.10412541)
+  - **Mehralizadeh, B.**, Soleiman, P., Nikkhoo, S., Rahimi, M., Kargar, A., Masoumi, F., & Moradi, H. (2023, December). Multi-Modal ASD Screening System: A Preliminary Study. In 2023 11th RSI International Conference on Robotics and Mechatronics (ICRoM) (pp. 228-234). IEEE.
 
 - [Sustainability](https://doi.org/10.3390/su15107790)
   - **Mehralizadeh, B.**; Baradaran, B.; Nikkhoo, S.; Soleiman, P.; Moradi, H. A Sensorized Toy Car for Autism Screening Using Multi-Modal Features. Sustainability 2023, 15, 7790. https://doi.org/10.3390/su15107790
