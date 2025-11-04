@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applied ML</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.PNG">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS styles adapted from your provided file for a consistent theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d; /* Very dark background */
+            color: #e0e0e0; /* Light gray text */
+            padding-top: 50px; /* Space for fixed top navbar + border */
+            padding-left: 10px; /* Space for fixed left border */
+            padding-right: 10px; /* Space for fixed right border */
+            padding-bottom: 10px; /* Space for fixed bottom border */
+        }
+        .site-border {
+            position: fixed;
+            background-color: #000000;
+            z-index: 2000; /* Higher than navbar */
+        }
+        #site-border-left { left: 0; top: 0; width: 10px; height: 100%; }
+        #site-border-right { right: 0; top: 0; width: 10px; height: 100%; }
+        #site-border-top { left: 0; top: 0; width: 100%; height: 10px; }
+        #site-border-bottom { left: 0; bottom: 0; width: 100%; height: 10px; }
+
+        .navbar-custom {
+            background-color: #000000; /* Black navbar */
+            position: fixed;
+            top: 10px; /* Below top border */
+            left: 10px; /* After left border */
+            right: 10px; /* Before right border */
+            width: calc(100% - 20px); /* Account for side borders */
+            z-index: 1000;
+            padding: 0.5rem 1rem; /* Reduced padding */
+        }
+        .nav-link-custom {
+            padding: 0.5rem 0.75rem; /* Smaller padding for nav links */
+            color: #cccccc;
+            text-decoration: none;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 0.25rem; /* Slightly less rounded */
+            font-size: 0.9rem; /* Slightly smaller font */
+        }
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: #ffffff;
+            background-color: #333333;
+        }
+        .section-title-custom {
+            font-size: 2rem; /* 32px */
+            font-weight: 600; /* Bolder */
+            margin-bottom: 2.5rem; /* 40px */
+            color: #e0e0e0; /* White title */
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .section-container-spacer {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        .card-custom {
+            background-color: #1a1a1a; /* Dark card background */
+            border: 1px solid #333333;
+            border-radius: 0.375rem; /* 6px */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            color: #c7c7c7;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-custom h3 {
+            color: #1ac2eb;
+            font-family: 'Courier New', Courier, monospace;
+        }
+         .card-custom h4 {
+            color: #33ccff; /* A slightly different shade for sub-titles within cards */
+            font-weight: 600;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sub-heading {
+             font-family: 'Inter', sans-serif;
+             color: #e0e0e0;
+             font-weight: 500;
+             font-size: 1.5rem;
+             margin-top: 3rem;
+             margin-bottom: 1.5rem;
+             border-bottom: 1px solid #333;
+             padding-bottom: 0.75rem;
+             display: flex;
+             align-items: center;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0d0d0d; border-left: 1px solid #333; }
+        ::-webkit-scrollbar-thumb { background: #1ac2eb; border-radius: 0px; }
+        ::-webkit-scrollbar-thumb:hover { background: #17cc00; }
+        
+        .skill-tag {
+            background-color: #222;
+            color: #1ac2eb;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            border: 1px solid #1ac2eb;
+            display: inline-block;
+            margin-bottom: 0.25rem;
+        }
+        .info-label {
+            font-family: 'Courier New', Courier, monospace;
+            color: #888;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="site-border-left" class="site-border"></div>
+    <div id="site-border-right" class="site-border"></div>
+    <div id="site-border-top" class="site-border"></div>
+    <div id="site-border-bottom" class="site-border"></div>
+
+    <header class="navbar-custom">
+        <nav class="container mx-auto px-4 flex justify-between items-center">
+            <a href="index.html" class="text-lg font-semibold text-white hover:text-gray-300">Bijan_Mehr/></a>
+            <div class="hidden md:flex space-x-1 items-center">
+				<a href="index.html" class="nav-link-custom">00: Back to Main</a>
+                 <a href="#summary" class="nav-link-custom">01: Project Summary</a>
+                 <a href="#playsense" class="nav-link-custom">02: PlaySense</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-button" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-black p-3 absolute w-full top-full left-0 border-t border-gray-700">
+			<a href="index.html" class="nav-link-custom">00: Back to Main</a>
+            <a href="#summary" class="nav-link-custom">01: Project Summary</a>
+            <a href="#playsense" class="nav-link-custom">02: PlaySense</a>
+            <hr class="border-gray-700 my-2">
+            <a href="index.html" class="block nav-link-custom text-center mb-1"><i class="fas fa-arrow-left mr-2"></i>Back to Main</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="project-details" class="section-container-spacer px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-6xl">
+                <h2 class="section-title-custom">Applied Machine Learning</h2>
+
+                <div class="grid md:grid-cols-3 gap-8 items-stretch mb-12">
+                    <div class="md:col-span-1 flex items-center justify-center bg-[#1a1a1a] p-6 rounded-md border-2 border-cyan-500">
+                        <img src="img/applied_ml.png" alt="Applied_ml">
+                    </div>
+                    <div class="md:col-span-2 card-custom space-y-4">
+                        <h3 class="text-xl font-semibold mb-2">Project Details</h3>
+                        <div class="flex items-start"><span class="info-label w-28"><i class="fas fa-globe w-5 text-cyan-400"></i>Domain:</span> <span class="text-gray-300">Human-Robot Interaction, Social & Rehabilitative Robotics</span></div>
+                        <div class="flex flex-wrap items-start">
+                             <span class="info-label w-28 mt-1"><i class="fas fa-tags w-5 text-cyan-400"></i>Keywords:</span>
+                             <div class="flex flex-wrap gap-2 flex-1">
+                                 <span class="skill-tag">gamification</span><span class="skill-tag">system engineering</span><span class="skill-tag">social robotics</span><span class="skill-tag">rehabilitative robotics</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-start">
+                             <span class="info-label w-28 mt-1"><i class="fas fa-cogs w-5 text-cyan-400"></i>Skills:</span>
+                             <div class="flex flex-wrap gap-2 flex-1">
+                                 <span class="skill-tag">ROS/ROS2</span><span class="skill-tag">Python</span><span class="skill-tag">Machine Vision</span><span class="skill-tag">CAD Modeling</span><span class="skill-tag">Data Fusion</span><span class="skill-tag">Mediapipe</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+
+                <div id="summary" class="section scroll-mt-20">
+                    <h3 class="sub-heading"><i class="fas fa-book-open text-cyan-400 mr-3"></i>Project Summary</h3>
+                    <p class="leading-relaxed text-lg">My Human-Robot Interaction portfolio unites large-scale, user-centered systems for diagnostic assessment, emotional learning, and rehabilitative therapy—each crafted to encourage natural engagement in children.</p>
+                </div>
+                
+                
+                <div id="playsense" class="section scroll-mt-20">
+                    <h3 class="sub-heading"><i class="fas fa-shapes text-cyan-400 mr-3"></i>PlaySense</h3>
+                    <div class="mt-4 space-y-6">
+                        <div class="card-custom"><h4 class="mb-2"><i class="fas fa-brain text-teal-300 mr-3"></i>Autism Screening Experience</h4><p class="text-sm leading-relaxed">A multi-robot ecosystem that pairs sensorized toys (wheel encoders + IMU) with a mobile robot equipped with RGB cameras. I designed and implemented the end-to-end data pipeline: Python-based vision and behavior-analysis algorithms, synchronized data logging, and multi-modal signal fusion. This integrated approach surpassed single-sensor methods in early ASD detection (ICRoM 2023; Sustainability 2023).</p></div>
+                        <div class="card-custom"><h4 class="mb-2"><i class="fas fa-smile-beam text-teal-300 mr-3"></i>Emotional Learning Experience</h4><p class="text-sm leading-relaxed">A “Robotic Social Environment” where expressive robots enact emotion-driven narratives, prompting children to observe and name feelings. I developed the synchronization engine aligning speech, gesture, and visual prompts, and integrated MediaPipe-based facial tracking to adapt interactions in real time. A Frontiers in Robotics and AI study showed that participants retained these emotional-recognition skills weeks after sessions.</p></div>
+                    </div>
+                </div>
+
+                <div id="handmotion" class="section scroll-mt-20">
+                    <h3 class="sub-heading"><i class="fas fa-hand-holding-medical text-cyan-400 mr-3"></i>Rehabilitative Platform: HandMotion+</h3>
+                     <div class="card-custom mt-4"><p class="leading-relaxed">In HandMotion+, our hand-therapy platform, palm stiffness is inferred directly from motor current via an impedance-control observer—no external force sensors needed. I implemented the sensor-fusion algorithms and crafted a Python-based, joystick-style gamification interface that turns therapeutic exercises into motivating, game-like tasks while logging performance metrics for adaptive therapy planning.</p></div>
+                </div>
+
+                <div id="results" class="section scroll-mt-20">
+                    <h3 class="sub-heading"><i class="fas fa-chart-bar text-cyan-400 mr-3"></i>Data Fusion Outperforms Single-Modal Screening</h3>
+                    <div class="mt-4">
+                        <div class="card-custom">
+                            <h4 class="text-lg mb-3 justify-center text-center">Fusion Model vs. Single-Modal Performance</h4>
+                            <canvas id="modelPerformanceChart"></canvas>
+                            <p class="text-xs mt-3 text-center text-gray-400">Multi-modal data fusion shows a clear advantage in both accuracy and recall over any single behavioral marker.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-16"><p class="text-xs text-gray-500 mt-12">&copy; <span id="currentYear"></span> 2025 Bijan Mehralizadeh // All_Rights_Reserved // System_Online</p></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- CHART.JS IMPLEMENTATION ---
+        // Global Chart Style Configuration
+        Chart.defaults.color = '#c7c7c7';
+        Chart.defaults.borderColor = '#333333';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        const modelPerformanceCtx = document.getElementById('modelPerformanceChart').getContext('2d');
+        new Chart(modelPerformanceCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Stereotypical Motor Function', 'Sensory Sensitivity', 'Social Interaction Initiation', 'Fusion Model'],
+                datasets: [{
+                    label: 'Accuracy',
+                    data: [0.68, 0.68, 0.43, 0.81],
+                    fill: true,
+                    backgroundColor: 'rgba(51, 204, 255, 0.2)',
+                    borderColor: 'rgba(51, 204, 255, 0.8)',
+                    pointBackgroundColor: 'rgba(51, 204, 255, 1)',
+                    borderWidth: 1.5
+                }, {
+                    label: 'Recall',
+                    data: [0.79, 0.54, 0.66, 0.915],
+                    fill: true,
+                    backgroundColor: 'rgba(255, 204, 0, 0.4)',
+                    borderColor: 'rgba(255, 204, 0, 1)',
+                    pointBackgroundColor: 'rgba(255, 204, 0, 1)',
+                    borderWidth: 2.5 
+                }]
+            },
+            options: {
+                scales: {
+                    r: { // Configuration for the radial axis
+                        beginAtZero: true,
+                        max: 1.0,
+                        angleLines: { color: '#444' },
+                        grid: { color: '#444' },
+                        pointLabels: {
+                            font: { size: 12 },
+                             color: '#c7c7c7'
+                        },
+                        ticks: {
+                           display: false, // Hides the radial tick labels
+                           backdropColor: 'transparent'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Mobile menu toggle
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Set current year in the footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        
+        document.addEventListener("keydown", function(event) {
+      // Check if '0' key is pressed (key code 48)
+      if (event.key === "0") {
+        window.location.href = "index.html";
+      }
+    });
+    
+    // --- ACTIVE LINK ON SCROLL ---
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-link-custom');
+
+    const observerOptions = {
+        root: null, // observes intersections in the viewport
+        rootMargin: '-50% 0px -50% 0px', // trigger when the section is in the middle of the screen
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+	
+	
+	document.addEventListener("keydown", function (event) {
+            let targetId = null;
+            let isDirectLink = false;
+            let directLinkElement = null;
+
+            if (event.key === "1") targetId = "#summary";
+            if (event.key === "2") targetId = "#playsense";
+            
+
+            if (targetId && !isDirectLink) {
+                event.preventDefault();
+                const correspondingNavLink = document.querySelector(`header.navbar-custom .nav-link-custom[href="${targetId}"]`);
+                if(correspondingNavLink) correspondingNavLink.click();
+            } else if (isDirectLink && directLinkElement) {
+                event.preventDefault();
+                // For direct links like CV, we can simulate a click or directly open
+                window.open(directLinkElement.href, '_blank');
+            }
+        });
+
+    </script>
+</body>
+</html>

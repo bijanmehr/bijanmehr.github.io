@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bijan Mehr - Portfolio</title>
+	<link rel="icon" type="image/x-icon" href="img/favicon.PNG">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d; /* Very dark background */
+            color: #e0e0e0; /* Light gray text */
+            padding-top: 50px; /* Space for fixed top navbar + border */
+            padding-left: 10px; /* Space for fixed left border */
+            padding-right: 10px; /* Space for fixed right border */
+            padding-bottom: 10px; /* Space for fixed bottom border */
+        }
+        .site-border {
+            position: fixed;
+            background-color: #000000;
+            z-index: 2000; /* Higher than navbar */
+        }
+        #site-border-left { left: 0; top: 0; width: 10px; height: 100%; }
+        #site-border-right { right: 0; top: 0; width: 10px; height: 100%; }
+        #site-border-top { left: 0; top: 0; width: 100%; height: 10px; }
+        #site-border-bottom { left: 0; bottom: 0; width: 100%; height: 10px; }
+
+        .navbar-custom {
+            background-color: #000000; /* Black navbar */
+            position: fixed;
+            top: 10px; /* Below top border */
+            left: 10px; /* After left border */
+            right: 10px; /* Before right border */
+            width: calc(100% - 20px); /* Account for side borders */
+            z-index: 1000;
+            padding: 0.5rem 1rem; /* Reduced padding */
+        }
+        .nav-link-custom {
+            padding: 0.5rem 0.75rem; /* Smaller padding for nav links */
+            color: #cccccc;
+            text-decoration: none;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 0.25rem; /* Slightly less rounded */
+            font-size: 0.9rem; /* Slightly smaller font */
+        }
+        .nav-link-custom:hover, .nav-link-custom.active {
+            color: #ffffff;
+            background-color: #333333;
+        }
+        /* Special style for Download CV to ensure it doesn't get 'active' state like section links */
+        .nav-link-cv {
+             padding: 0.5rem 0.75rem;
+            color: #cccccc;
+            text-decoration: none;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+        .nav-link-cv:hover {
+            color: #ffffff;
+            background-color: #333333;
+        }
+
+
+        .hero-section-custom {
+            background-image: url('img/background.png'); /* Darker, hacker-themed placeholder */
+            background-size: cover;
+            background-position: center;
+            height: calc(100vh - 50px); /* Full height minus navbar and top border */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -50px; /* Pull it up to fill space correctly with fixed navbar */
+        }
+        .hero-text-container {
+            background-color: rgba(0,0,0,0.6);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid #333;
+        }
+
+        .section-title-custom {
+            font-size: 2rem; /* 32px */
+            font-weight: 500;
+            margin-bottom: 2.5rem; /* 40px */
+            color: #1ac2eb; /* Hacker green for titles */
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace; /* Monospace font for titles */
+        }
+        .section-container-spacer {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        .card-custom {
+            background-color: #1a1a1a; /* Dark card background */
+            border: 1px solid #333333;
+            border-radius: 0.375rem; /* 6px */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            color: #c7c7c7;
+            display: flex; /* Added for flex layout */
+            flex-direction: column; /* Stack items vertically */
+        }
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(26, 255, 0, 0.2); /* Green glow on hover */
+        }
+        .card-custom-content {
+            padding: 1.5rem;
+            flex-grow: 1; /* Allow content to grow */
+            display: flex;
+            flex-direction: column;
+        }
+        .card-custom h3 {
+            color: #1ac2eb; /* Green for card titles */
+        }
+        .card-custom a.btn-discover, .card-custom a.publication-link { /* Specificity for links within cards */
+            color: #33ccff; /* Light blue for links in cards */
+        }
+        .card-custom a.btn-discover:hover, .card-custom a.publication-link:hover {
+            color: #66ddff;
+        }
+        .btn-discover {
+            background-color: transparent;
+            border: 1px solid #1ac2eb;
+            color: #1ac2eb !important; /* Ensure hacker green for button text */
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-block; /* Added for proper styling */
+            margin-top: auto; /* Push button to bottom */
+        }
+        .btn-discover:hover {
+            background-color: #1ac2eb;
+            color: #000000 !important; /* Ensure black text on hover */
+        }
+        .text-content h1, .text-content span {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .contact-icon {
+            color: #1ac2eb; /* Green icons */
+            margin-right: 0.5rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0d0d;
+            border-left: 1px solid #333;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1ac2eb;
+            border-radius: 0px; /* Square scrollbar thumb */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #17cc00;
+        }
+        .skill-tag {
+            background-color: #222;
+            color: #1ac2eb;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            border: 1px solid #1ac2eb;
+        }
+        .sub-project-tag {
+            background-color: #2a2a2a;
+            color: #a0a0a0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.2rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem;
+            border: 1px solid #444;
+            display: inline-block;
+            margin-right: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .publication-link {
+            color: #33ccff;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .publication-link:hover {
+            color: #66ddff;
+            text-decoration: underline;
+        }
+
+        /* --- NEW Terminal styles START --- */
+        .terminal-window {
+            background-color: #1a1a1a; /* Dark card background */
+            border: 1px solid #333333;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(26, 255, 0, 0.1); /* Faint green glow */
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden; /* To keep the rounded corners */
+        }
+        .terminal-header {
+            background-color: #222;
+            border-bottom: 1px solid #333;
+            padding: 0.5rem 1rem;
+            color: #1ac2eb;
+            font-weight: bold;
+        }
+        .terminal-header::before {
+            content: '$ cat ./work_history.log'; /* Example command */
+        }
+        .terminal-content {
+            padding: 1rem 1.5rem;
+            max-height: 450px; /* This is the key! Fixes height */
+            overflow-y: auto; /* This is the key! Adds internal scroll */
+            color: #c7c7c7;
+            line-height: 1.6;
+        }
+        .log-entry {
+            margin-bottom: 0.75rem;
+        }
+        .log-year {
+            color: #1ac2eb; /* Hacker green for the year */
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .log-text {
+            color: #c7c7c7;
+        }
+        /* --- NEW Terminal styles END --- */
+
+        /* --- Timeline styles REMOVED --- */
+        
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="site-border-left" class="site-border"></div>
+    <div id="site-border-right" class="site-border"></div>
+    <div id="site-border-top" class="site-border"></div>
+    <div id="site-border-bottom" class="site-border"></div>
+
+    <header class="navbar-custom">
+        <nav class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#home" class="text-lg font-semibold text-white hover:text-gray-300">Bijan_Mehr/></a>
+            <div class="hidden md:flex space-x-1 items-center">
+                <a href="#home" class="nav-link-custom active">01 : Home</a>
+                <a href="#about" class="nav-link-custom">02 : About</a>
+                <a href="#works" class="nav-link-custom">03 : Works</a>
+                <a href="#publications" class="nav-link-custom">04 : Publications</a>
+                <a href="#contact" class="nav-link-custom">05 : Contact</a>
+                <a href="bijanmehr_cv.pdf" target="_blank" id="nav-cv-link" class="nav-link-cv">06 : Download_CV</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-button" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-black p-3 absolute w-full top-full left-0 border-t border-gray-700">
+            <a href="#home" class="block nav-link-custom text-center mb-1 mobile-nav-link">01 : Home</a>
+            <a href="#about" class="block nav-link-custom text-center mb-1 mobile-nav-link">02 : About</a>
+            <a href="#works" class="block nav-link-custom text-center mb-1 mobile-nav-link">03 : Works</a>
+            <a href="#publications" class="block nav-link-custom text-center mb-1 mobile-nav-link">04 : Publications</a>
+            <a href="#contact" class="block nav-link-custom text-center mb-1 mobile-nav-link">05 : Contact</a>
+            <a href="bijanmehr_cv.pdf" target="_blank" id="mobile-nav-cv-link" class="block nav-link-cv text-center mobile-nav-link">06 : Download_CV</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section-custom text-white">
+            <div class="text-center hero-text-container">
+                <div class="text-content">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-3">Hello,<br>
+                        <span id="typed-strings-container">
+                            <span>I'm Bijan</span>
+                            <span>A CS Ph.D. Student</span>
+                            <span>A System Resiliency Researcher</span>
+                            <span>A Mechatronics Engineer</span>
+                            <span>A Roboticist</span>
+                        </span>
+                        <span id="typed"></span>
+                    </h1>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section-container-spacer px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-5xl">
+                <h2 class="section-title-custom">// 02 : About_Me</h2>
+                <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <div class="md:col-span-1">
+                        <img src="img/me.png" alt="Bijan Mehralizadeh" class="rounded-md shadow-lg mx-auto w-full max-w-xs md:max-w-full border-2 border-green-500" onerror="this.onerror=null;this.src='https://placehold.co/400x400/111111/1aff00?text=Bijan';">
+                    </div>
+                    <div class="md:col-span-2 text-base space-y-6">
+                        <p class="leading-relaxed">I’m Bijan Mehralizadeh, a first‑year Computer Science PhD student at George Washington University with a background in mechatronics engineering. I’ve tried my hand at being a “full‑stack engineer” (a term a lab mate coined for someone who wants to build everything), but right now I’m laying the groundwork for research on making autonomous systems—drones, robots, IoT devices—more resilient and explainable. It’s early days, but I’m focused on how these machines can handle failures or attacks without falling apart. When I’m not in class or the lab, you’ll find me taking gadgets apart, gaming, or hiking as an outdoor nerd—blissfully forgetting all the bugs I left behind.</p>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2" style="color: #33ccff;">// Education_Log</h3>
+                            <ul class="list-none space-y-1 pl-4 border-l-2 border-green-500">
+                                <li class="text-sm"><span class="text-green-400 mr-2">&gt;</span>Ph.D. Computer Science (Jan 2025 - Present)</li>
+                                <li class="text-sm"><span class="text-green-400 mr-2">&gt;</span>M.S. Mechatronics Engineering (Sep 2017 - Sep 2021)</li>
+                                <li class="text-sm"><span class="text-green-400 mr-2">&gt;</span>B.S. Mechatronics Engineering (Sep 2012 - Jun 2017)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3" style="color: #33ccff;">// Skill_Matrix</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="skill-tag">Python</span><span class="skill-tag">C/C++</span>
+                                <span class="skill-tag">Matlab</span><span class="skill-tag">Simulink</span>
+                                <span class="skill-tag">ROS/ROS2</span><span class="skill-tag">Gazebo</span>
+                                <span class="skill-tag">Moveit</span><span class="skill-tag">Rviz</span>
+                                <span class="skill-tag">TensorFlow</span><span class="skill-tag">OpenCV</span>
+                                <span class="skill-tag">MediaPipe</span><span class="skill-tag">Pytorch</span>
+                                <span class="skill-tag">Scikit</span><span class="skill-tag">Keras</span>
+                                <span class="skill-tag">Keras</span>
+                            </div>
+                        </div>
+                         <p class="text-sm">Access full datastream: <a href="bijanmehr_cv.pdf" id="about-cv-link" target="_blank" class="text-green-400 hover:text-green-300 underline font-medium">Download_CV.pdf</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="section-container-spacer bg-black bg-opacity-50 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-5xl"> <h2 class="section-title-custom">// 03 : Works_History</h2>
+
+                <div class="terminal-window">
+                    <div class="terminal-header"></div>
+                    <div class="terminal-content">
+                        <div class="log-entry">
+                            <span class="log-year">> 2012:</span>
+                            <span class="log-text">started my bachelor in mechatronics engineering</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2013:</span>
+                            <span class="log-text">failed a lot of engineering courses :))</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2014:</span>
+                            <span class="log-text">find my way as a system engineer</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2015:</span>
+                            <span class="log-text">built my first robot</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2016:</span>
+                            <span class="log-text">robotics competitions craziness</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2017:</span>
+                            <span class="log-text">graduate and start my freelance journey<br>started my masters in mechatronics engineering</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2018:</span>
+                            <span class="log-text">start my work in ARIS Lab<br>built my first social robot</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2019:</span>
+                            <span class="log-text">built my first complex system for human robot interaction</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2020:</span>
+                            <span class="log-text">run my trials and data collections</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2021:</span>
+                            <span class="log-text">publish papers and graduate</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2022:</span>
+                            <span class="log-text">actually made some money from ROS and robotics development</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2023:</span>
+                            <span class="log-text">worked as a technical team lead, engineering is not just hard skills!!!!</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2024:</span>
+                            <span class="log-text">worked as the team lead, soft skills are hard!!!</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-year">> 2025:</span>
+                            <span class="log-text">start my PhD in computer science<br>start my work in Systems Security Research Group</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <section id="publications" class="section-container-spacer px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-5xl">
+                <h2 class="section-title-custom">// 04 : Publications_Log</h2>
+                <div class="space-y-4">
+                    <div class="card-custom p-4">
+                        <h3 class="text-md font-semibold">Multi-modal ASD screening system, A preliminary study</h3>
+                        <p class="text-xs text-gray-400 italic">Mehralizadeh, B.; Soleiman, P.; Nikkhoo, S.; Rahimi, M.; Kargar, A.; Masoumi, F.: Moradi, H. (2023). International Conference on Robotics and Mechatronics (ICROM).</p>
+                        </div>
+                    <div class="card-custom p-4">
+                        <h3 class="text-md font-semibold">A Sensorized Toy Car for Autism Screening Using Multi-Modal Features</h3>
+                        <p class="text-xs text-gray-400 italic">Mehralizadeh, B.; Baradaran, B.; Nikkhoo, S.; Soleiman, P.; Moradi, H. (2023). Sustainability, 15, 7790.</p>
+                        <a href="https://doi.org/10.3390/su15107790" target="_blank" class="publication-link">DOI:10.3390/su15107790 &gt;</a>
+                    </div>
+                    <div class="card-custom p-4">
+                        <h3 class="text-md font-semibold">Fully robotic social environment for teaching and practicing affective interaction...</h3>
+                        <p class="text-xs text-gray-400 italic">Soleiman P, Moradi H, Mehralizadeh B, Ameri H, Arriaga RI, Pouretemad HR, Baghbanzadeh N and Vahid LK (2023). Frontiers in Robotics and AI, 10:1088582.</p>
+                        <a href="https://doi.org/10.3389/frobt.2023.1088582" target="_blank" class="publication-link">DOI:10.3389/frobt.2023.1088582 &gt;</a>
+                    </div>
+                    <div class="card-custom p-4">
+                        <h3 class="text-md font-semibold">Robotic Social Environments: A Promising Platform for Autism Therapy</h3>
+                        <p class="text-xs text-gray-400 italic">Soleiman, P., Moradi, H., Mehralizadeh, B., Azizi, N., Anjidani, F., Pouretemad, H. R., Arriaga, R. I. (2020). International Conference on Social Robotics (ICSR).</p>
+                        <a href="https://doi.org/10.1007/978-3-030-62056-1_20" target="_blank" class="publication-link">DOI:10.1007/978-3-030-62056-1_20 &gt;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section-container-spacer bg-black bg-opacity-70 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-3xl text-center">
+                <h2 class="section-title-custom">// 05 : Contact_Channel</h2>
+                <p class="text-base mb-10 leading-relaxed">
+                    Open to new projects, research collaborations, or system integration challenges. Initiate contact sequence.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-md">
+                    <a href="mailto:bijanmehralizadeh@gmail.com" class="hover:text-green-400 transition-colors flex items-center">
+                        <i class="fas fa-envelope contact-icon text-xl"></i>bijanmehralizadeh@gmail.com
+                    </a>
+                     <a href="https://www.linkedin.com/in/bijanmehr/" target="_blank" class="hover:text-green-400 transition-colors flex items-center">
+                        <i class="fab fa-linkedin contact-icon text-xl"></i>linkedin.com/in/bijanmehr
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=KOba2dsAAAAJ" target="_blank" class="hover:text-green-400 transition-colors flex items-center">
+                        <i class="fas fa-graduation-cap contact-icon text-xl"></i>Google_Scholar_Profile
+                    </a>
+                </div>
+                <p class="text-xs text-gray-500 mt-12">&copy; <span id="currentYear"></span> Bijan Mehralizadeh // All_Rights_Reserved // System_Online</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Typed.js initialization
+        var typed = new Typed('#typed', {
+            stringsElement: '#typed-strings-container',
+            typeSpeed: 40,
+            backSpeed: 20,
+            backDelay: 1500,
+            loop: true,
+            smartBackspace: true,
+            showCursor: true,
+            cursorChar: '_',
+        });
+
+        // Mobile menu toggle
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                // For regular section links, close menu.
+                // For CV link, it opens in new tab, menu can stay or close. Let's close it.
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Smooth scroll for nav links and active state (excluding direct CV link)
+        document.querySelectorAll('a.nav-link-custom[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = document.querySelector('header.navbar-custom').offsetHeight + 10; // 10px top border
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+
+                    document.querySelectorAll('.nav-link-custom, .nav-link-cv').forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    document.querySelectorAll('#mobile-menu .nav-link-custom, #mobile-menu .nav-link-cv').forEach(navLink => {
+                        navLink.classList.remove('active');
+                        if (navLink.getAttribute('href') === targetId) {
+                            navLink.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+        
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('header.navbar-custom .nav-link-custom:not(.mobile-nav-link)');
+        const allMobileLinks = document.querySelectorAll('#mobile-menu .nav-link-custom');
+
+
+        function changeLinkState() {
+            let index = sections.length;
+            const headerHeight = document.querySelector('header.navbar-custom').offsetHeight + 20; 
+
+            while(--index >= 0 && window.scrollY + headerHeight < sections[index].offsetTop) {}
+            
+            index = Math.max(0, index);
+
+            // Remove active from all nav links first, including CV link if it somehow got it
+            document.querySelectorAll('header.navbar-custom .nav-link-custom, header.navbar-custom .nav-link-cv').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('#mobile-menu .nav-link-custom, #mobile-menu .nav-link-cv').forEach(link => link.classList.remove('active'));
+            
+            if (navLinks[index]) { // navLinks only contains section links
+                 navLinks[index].classList.add('active');
+            }
+            const activeSectionId = sections[index] ? sections[index].id : null;
+            if (activeSectionId) {
+                const activeMobileLink = document.querySelector(`#mobile-menu .nav-link-custom[href="#${activeSectionId}"]`);
+                if (activeMobileLink) activeMobileLink.classList.add('active');
+            }
+        }
+        
+        if (window.location.hash && document.querySelector(window.location.hash)) { // Check if hash target exists
+            const initialLink = document.querySelector(`header.navbar-custom .nav-link-custom[href="${window.location.hash}"]`);
+            const initialMobileLink = document.querySelector(`#mobile-menu .nav-link-custom[href="${window.location.hash}"]`);
+            if (initialLink) initialLink.classList.add('active');
+            if (initialMobileLink) initialMobileLink.classList.add('active');
+        } else {
+            if (navLinks.length > 0) navLinks[0].classList.add('active'); // Default to Home
+            if (sections.length > 0 && sections[0].id) { 
+                const firstMobileLink = document.querySelector(`#mobile-menu .nav-link-custom[href="#${sections[0].id}"]`);
+                if(firstMobileLink) firstMobileLink.classList.add('active');
+            }
+        }
+        
+        window.addEventListener('scroll', changeLinkState);
+        document.addEventListener('DOMContentLoaded', changeLinkState);
+
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Keyboard navigation
+        const cvLinkDesktop = document.getElementById('nav-cv-link');
+        // For mobile, the link is part of mobileNavLinks, so no specific element needed here for click simulation.
+
+        document.addEventListener("keydown", function (event) {
+            let targetId = null;
+            let isDirectLink = false;
+            let directLinkElement = null;
+
+            if (event.key === "1") targetId = "#home";
+            if (event.key === "2") targetId = "#about";
+            if (event.key === "3") targetId = "#works";
+            if (event.key === "4") targetId = "#publications";
+            if (event.key === "5") targetId = "#contact";
+            if (event.key === "6") {
+                isDirectLink = true;
+                directLinkElement = cvLinkDesktop; // Use the desktop link for triggering
+            }
+
+            if (targetId && !isDirectLink) {
+                event.preventDefault();
+                const correspondingNavLink = document.querySelector(`header.navbar-custom .nav-link-custom[href="${targetId}"]`);
+                if(correspondingNavLink) correspondingNavLink.click();
+            } else if (isDirectLink && directLinkElement) {
+                event.preventDefault();
+                // For direct links like CV, we can simulate a click or directly open
+                window.open(directLinkElement.href, '_blank');
+            }
+        });
+
+        // --- Intersection Observer for timeline animation REMOVED ---
+        
+    </script>
+</body>
+</html>
