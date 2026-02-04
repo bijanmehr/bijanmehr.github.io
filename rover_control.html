@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rover Dynamics Lab - Single File</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and Babel CDNs -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; margin: 0; font-family: sans-serif; }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // Custom Icon Components
+        const Icons = {
+            Cpu: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>,
+            Activity: ({className}) => <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
+            Play: ({className}) => <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
+            RotateCcw: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg>,
+            Zap: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+            CheckCircle: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+            AlertTriangle: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+            Target: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
+            TrendingUp: ({className}) => <svg className={className} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
+            Gauge: ({className}) => <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>,
+            ChevronRight: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        };
+
+        const App = () => {
+            const CANVAS_WIDTH = 900;
+            const CANVAS_HEIGHT = 520;
+            const TARGET_Y_TOP = 140;
+            const TARGET_Y_BOTTOM = 380;
+            const ROVER_LENGTH = 75; 
+            const ROVER_WIDTH = 55;
+            const FORWARD_VELOCITY = 2.4; 
+
+            const [dampingType, setDampingType] = useState('critically');
+            const [isSimulating, setIsSimulating] = useState(true);
+            const [roverPos, setRoverPos] = useState({ x: 100, y: TARGET_Y_TOP, vy: 0, heading: 0 });
+            const [targetY, setTargetY] = useState(TARGET_Y_TOP);
+            const [history, setHistory] = useState([]);
+            
+            const [metrics, setMetrics] = useState({
+                startTime: 0, peakTime: null, settlingTime: null,
+                percentOvershoot: 0, steadyStateError: 0, peakY: null, initialStep: 0, peakVal: 0
+            });
+
+            const requestRef = useRef();
+            const lastTimeRef = useRef();
+            const simTimeRef = useRef(0);
+            const errorIntegralRef = useRef(0);
+
+            const params = useMemo(() => {
+                const k = 0.04; const m = 1.0;
+                const omega_n = Math.sqrt(k / m);
+                let zeta = 1.0; let staticFriction = 0; let ki = 0; 
+                if (dampingType === 'underdamp') zeta = 0.12; 
+                else if (dampingType === 'pid') { zeta = 0.707; ki = 0.0006; }
+                else if (dampingType === 'critically') zeta = 1.0;
+                else if (dampingType === 'overdamp') { zeta = 3.5; staticFriction = 1.6; }
+                return { k, m, omega_n, zeta, staticFriction, ki };
+            }, [dampingType]);
+
+            const toggleLane = () => {
+                const newTarget = targetY === TARGET_Y_TOP ? TARGET_Y_BOTTOM : TARGET_Y_TOP;
+                const startY = roverPos.y;
+                setTargetY(newTarget);
+                setMetrics({
+                    startTime: simTimeRef.current, peakTime: null, settlingTime: null,
+                    percentOvershoot: 0, steadyStateError: 0, peakY: startY,
+                    initialStep: Math.abs(newTarget - startY), peakVal: 0
+                });
+                errorIntegralRef.current = 0; 
+            };
+
+            const resetSim = () => {
+                setRoverPos({ x: 100, y: TARGET_Y_TOP, vy: 0, heading: 0 });
+                setTargetY(TARGET_Y_TOP);
+                setHistory([]);
+                simTimeRef.current = 0;
+                errorIntegralRef.current = 0;
+                setMetrics({ startTime: 0, peakTime: null, settlingTime: null, percentOvershoot: 0, steadyStateError: 0, initialStep: 0, peakVal: 0 });
+            };
+
+            const animate = (time) => {
+                if (lastTimeRef.current !== undefined && isSimulating) {
+                    const dt = Math.min((time - lastTimeRef.current) / 16, 2); 
+                    simTimeRef.current += dt;
+                    setRoverPos(prev => {
+                        const error = prev.y - targetY;
+                        errorIntegralRef.current += error * dt;
+                        
+                        // Handle dynamic damping for 'underdamp' limit cycle behavior
+                        let effectiveZeta = params.zeta;
+                        if (dampingType === 'underdamp') {
+                            // Damping fades as the error approaches zero, preventing steady state.
+                            // This creates a sustained "hunting" oscillation like a slippery road.
+                            effectiveZeta = params.zeta * (1 - Math.exp(-Math.abs(error) / 18));
+                        }
+
+                        const c = 2 * effectiveZeta * params.omega_n * params.m;
+                        const restorativeForce = -params.k * error;
+                        const dampingForce = -c * prev.vy;
+                        const integralForce = -params.ki * errorIntegralRef.current;
+                        
+                        let totalForce = restorativeForce + dampingForce + integralForce;
+                        let ay = 0;
+                        if (params.staticFriction > 0 && Math.abs(totalForce) < params.staticFriction && Math.abs(prev.vy) < 0.01) {
+                            ay = 0;
+                        } else {
+                            const frictionForce = prev.vy !== 0 ? -Math.sign(prev.vy) * (params.staticFriction * 0.45) : 0;
+                            ay = (totalForce + frictionForce) / params.m;
+                        }
+                        const newVy = prev.vy + ay * dt;
+                        const newY = prev.y + newVy * dt;
+                        const newX = (prev.x + FORWARD_VELOCITY * dt) % CANVAS_WIDTH;
+                        const newHeading = Math.atan2(newVy, FORWARD_VELOCITY) * (180 / Math.PI);
+                        const elapsed = simTimeRef.current - metrics.startTime;
+                        const stepSize = metrics.initialStep || 1;
+                        setMetrics(m => {
+                            let updated = { ...m };
+                            if (Math.abs(newVy) < 0.005 && elapsed > 100) updated.steadyStateError = Math.abs(newY - targetY);
+                            const currentOvershoot = targetY === TARGET_Y_TOP ? (targetY - newY) : (newY - targetY);
+                            if (currentOvershoot > (m.peakVal || 0)) {
+                                updated.peakVal = currentOvershoot;
+                                updated.peakTime = elapsed;
+                                updated.percentOvershoot = (currentOvershoot / stepSize) * 100;
+                            }
+                            const errorPercent = (Math.abs(newY - targetY) / stepSize);
+                            
+                            // Adjust settling time criteria for hunting behavior (it never settles)
+                            if (errorPercent <= 0.02 && dampingType !== 'underdamp') { 
+                                if (!updated.settlingTime) updated.settlingTime = elapsed; 
+                            }
+                            else { updated.settlingTime = null; }
+                            return updated;
+                        });
+                        if (newX < prev.x) setHistory([]);
+                        return { x: newX, y: newY, vy: newVy, heading: newHeading };
+                    });
+                    setHistory(prev => {
+                        const updated = [...prev, { x: roverPos.x, y: roverPos.y }];
+                        return updated.length > 250 ? updated.slice(1) : updated;
+                    });
+                }
+                lastTimeRef.current = time;
+                requestRef.current = requestAnimationFrame(animate);
+            };
+
+            useEffect(() => {
+                requestRef.current = requestAnimationFrame(animate);
+                return () => cancelAnimationFrame(requestRef.current);
+            }, [isSimulating, targetY, params, roverPos, metrics.startTime]);
+
+            const profiles = {
+                underdamp: { title: "underdamp", zeta: 0.12, color: "text-rose-400", stroke: "#fb7185", icon: Icons.Activity, desc: "Frictionless 'hunting' behavior mimicking a slippery road." },
+                pid: { title: "PID Controller", zeta: 0.707, color: "text-amber-400", stroke: "#fbbf24", icon: Icons.Zap, desc: "Optimized response with error correction." },
+                critically: { title: "critically dampt", zeta: 1.00, color: "text-emerald-400", stroke: "#34d399", icon: Icons.CheckCircle, desc: "Fastest non-oscillatory path." },
+                overdamp: { title: "overdamp", zeta: 3.50, color: "text-sky-400", stroke: "#38bdf8", icon: Icons.AlertTriangle, desc: "Sluggish response prone to stalling." }
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-6 bg-[#020617]">
+                    <div className="max-w-[1500px] mx-auto space-y-6">
+                        {/* MINIMAL HEADER */}
+                        <div className="flex flex-col md:flex-row items-center justify-between bg-slate-900/40 border border-slate-800 rounded-[2rem] px-8 py-5 backdrop-blur-xl gap-6">
+                            <div className="flex items-center gap-5">
+                                <div className="p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-2xl"><Icons.Cpu /></div>
+                                <div>
+                                    <h1 className="text-base font-black tracking-tight text-white leading-none uppercase">Rover Dynamics Lab</h1>
+                                    <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1.5 leading-tight">developed by bijan mehr with GEMINI ❤️</p>
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-center gap-12 font-mono">
+                                <div className="text-center">
+                                    <div className="text-[9px] text-slate-500 uppercase font-bold tracking-tight mb-0.5">Damping (ζ)</div>
+                                    <div className={`text-lg font-bold tabular-nums ${profiles[dampingType].color}`}>{params.zeta.toFixed(3)}</div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-[9px] text-slate-500 uppercase font-bold tracking-tight mb-0.5">Nat. Freq (ωn)</div>
+                                    <div className="text-lg font-bold text-white tabular-nums">{params.omega_n.toFixed(3)} <span className="text-[9px] text-slate-500">rad/s</span></div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <button onClick={() => setIsSimulating(!isSimulating)} className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all font-black text-[10px] uppercase">
+                                    {isSimulating ? <Icons.Activity className="text-emerald-400" /> : <Icons.Play className="text-sky-400" />}
+                                    {isSimulating ? "Pause" : "Resume"}
+                                </button>
+                                <button onClick={resetSim} className="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all"><Icons.RotateCcw /></button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-12 gap-6 items-start">
+                            {/* LEFT PANEL - CONFIG */}
+                            <div className="col-span-12 xl:col-span-2 space-y-4">
+                                <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-2 mb-2">Configurations</h3>
+                                {Object.keys(profiles).map(key => {
+                                    const Icon = profiles[key].icon;
+                                    const active = dampingType === key;
+                                    return (
+                                        <button key={key} onClick={() => { setDampingType(key); resetSim(); }} className={`w-full group p-4 rounded-3xl border transition-all text-left relative overflow-hidden ${active ? `bg-slate-800/80 border-slate-500 shadow-xl` : 'bg-slate-900/30 border-slate-800 hover:border-slate-700'}`}>
+                                            <div className="flex items-start gap-4 relative z-10">
+                                                <div className={`p-2 rounded-xl shrink-0 ${active ? 'bg-slate-900' : 'bg-slate-800/50 group-hover:bg-slate-800'}`}><Icon className={active ? profiles[key].color : 'text-slate-600'} /></div>
+                                                <div>
+                                                    <div className={`text-[11px] font-black uppercase mb-0.5 ${active ? 'text-white' : 'text-slate-400'}`}>{profiles[key].title}</div>
+                                                    <p className="text-[9px] text-slate-500 font-medium leading-relaxed">{profiles[key].desc}</p>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {/* CENTER - VIEWPORT (ENV SECTION) - ENLARGED */}
+                            <div className="col-span-12 xl:col-span-7 space-y-6">
+                                <div className="relative bg-[#000] rounded-[2.5rem] border-[6px] border-slate-900 shadow-2xl overflow-hidden ring-1 ring-slate-800/50">
+                                    <svg viewBox={`0 0 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}`} className="w-full h-auto">
+                                        <rect width={CANVAS_WIDTH} height={CANVAS_HEIGHT} fill="#020617" />
+                                        <rect x="0" y={TARGET_Y_TOP-20} width={CANVAS_WIDTH} height="40" fill="#ffffff03" rx="10" />
+                                        <rect x="0" y={TARGET_Y_BOTTOM-20} width={CANVAS_WIDTH} height="40" fill="#ffffff03" rx="10" />
+                                        <line x1="0" y1={targetY} x2={CANVAS_WIDTH} y2={targetY} stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="10,5" opacity="0.3" />
+                                        <polyline points={history.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke={profiles[dampingType].stroke} strokeWidth="3.5" strokeLinecap="round" opacity="0.9" />
+                                        <g transform={`translate(${roverPos.x}, ${roverPos.y}) rotate(${roverPos.heading})`}>
+                                            <g transform={`translate(${-ROVER_LENGTH/2}, ${-ROVER_WIDTH/2})`}>
+                                                <rect width={ROVER_LENGTH} height={ROVER_WIDTH} rx="8" fill="#1e293b" stroke="#475569" strokeWidth="2" />
+                                                <circle cx={ROVER_LENGTH-15} cy={ROVER_WIDTH/2} r="8" fill="#475569" />
+                                                <circle cx={ROVER_LENGTH-15} cy={ROVER_WIDTH/2} r="3" fill="#ef4444" />
+                                                {[8, 32, 56].map(x => [-8, ROVER_WIDTH].map(y => (
+                                                    <rect key={`${x}-${y}`} x={x} y={y} width="14" height="8" rx="2" fill="#020617" />
+                                                )))}
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            {/* RIGHT PANEL - TELEMETRY & TRIGGER BUTTON */}
+                            <div className="col-span-12 xl:col-span-3 space-y-6">
+                                <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-2 mb-2">Live Telemetry</h3>
+                                <div className="bg-slate-900/50 border border-slate-800 rounded-[2rem] p-6 space-y-6 shadow-xl">
+                                    <div className="space-y-3">
+                                        <div className="text-[9px] font-bold uppercase text-slate-500">Peak Overshoot (%)</div>
+                                        <div className="text-4xl font-black font-mono text-white tracking-tighter tabular-nums">{metrics.percentOvershoot.toFixed(2)}<span className="text-lg text-slate-600 ml-1">%</span></div>
+                                        <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                                            <div className={`h-full transition-all duration-500 ${metrics.percentOvershoot > 15 ? 'bg-rose-500' : 'bg-emerald-500'}`} style={{ width: `${Math.min(100, metrics.percentOvershoot * 2.5)}%` }} />
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800/50">
+                                        <div className="space-y-1.5">
+                                            <div className="text-[8px] font-bold uppercase text-slate-500">Peak Time (Tp)</div>
+                                            <div className="text-lg font-mono font-bold text-blue-400 tabular-nums">{metrics.peakTime ? (metrics.peakTime * 0.016).toFixed(2) : '--'}<span className="text-[9px] ml-1">s</span></div>
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <div className="text-[8px] font-bold uppercase text-slate-500">Settling Time (Ts)</div>
+                                            <div className="text-lg font-mono font-bold text-emerald-400 tabular-nums">{metrics.settlingTime ? (metrics.settlingTime * 0.016).toFixed(2) : 'INF'}<span className="text-[9px] ml-1">s</span></div>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-4 border-t border-slate-800/50">
+                                        <div className="text-[8px] font-bold uppercase text-slate-500 mb-2">Steady-State Error (Ess)</div>
+                                        <div className="text-xl font-mono font-bold text-white tabular-nums">{metrics.steadyStateError.toFixed(3)}<span className="text-xs text-slate-600 ml-1 uppercase">PX</span></div>
+                                    </div>
+                                </div>
+
+                                {/* TRIGGER BUTTON - NEW LOCATION */}
+                                <div className="pt-4">
+                                    <button 
+                                        onClick={toggleLane} 
+                                        className="w-full group relative px-8 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95 overflow-hidden"
+                                    >
+                                        <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <span className="relative z-10 flex items-center justify-center gap-4">
+                                            <Icons.Target className="group-hover:rotate-45 transition-transform" />
+                                            TRIGGER_LANE_CHANGE
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
