@@ -1,583 +1,467 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bijan Mehr - Portfolio</title>
-	<link rel="icon" type="image/x-icon" href="img/favicon.PNG">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Bijan Mehr — Portfolio</title>
+    <meta name="description" content="Bijan Mehr — CS PhD student at GWU researching resilient, secure, and explainable autonomous systems.">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d0d0d; /* Very dark background */
-            color: #e0e0e0; /* Light gray text */
-            padding-top: 50px; /* Space for fixed top navbar + border */
-            padding-left: 10px; /* Space for fixed left border */
-            padding-right: 10px; /* Space for fixed right border */
-            padding-bottom: 10px; /* Space for fixed bottom border */
-        }
-        .site-border {
-            position: fixed;
-            background-color: #000000;
-            z-index: 2000; /* Higher than navbar */
-        }
-        #site-border-left { left: 0; top: 0; width: 10px; height: 100%; }
-        #site-border-right { right: 0; top: 0; width: 10px; height: 100%; }
-        #site-border-top { left: 0; top: 0; width: 100%; height: 10px; }
-        #site-border-bottom { left: 0; bottom: 0; width: 100%; height: 10px; }
-
-        .navbar-custom {
-            background-color: #000000; /* Black navbar */
-            position: fixed;
-            top: 10px; /* Below top border */
-            left: 10px; /* After left border */
-            right: 10px; /* Before right border */
-            width: calc(100% - 20px); /* Account for side borders */
-            z-index: 1000;
-            padding: 0.5rem 1rem; /* Reduced padding */
-        }
-        .nav-link-custom {
-            padding: 0.5rem 0.75rem; /* Smaller padding for nav links */
-            color: #cccccc;
-            text-decoration: none;
-            transition: color 0.3s ease, background-color 0.3s ease;
-            border-radius: 0.25rem; /* Slightly less rounded */
-            font-size: 0.9rem; /* Slightly smaller font */
-        }
-        .nav-link-custom:hover, .nav-link-custom.active {
-            color: #ffffff;
-            background-color: #333333;
-        }
-        /* Special style for Download CV to ensure it doesn't get 'active' state like section links */
-        .nav-link-cv {
-             padding: 0.5rem 0.75rem;
-            color: #cccccc;
-            text-decoration: none;
-            transition: color 0.3s ease, background-color 0.3s ease;
-            border-radius: 0.25rem;
-            font-size: 0.9rem;
-        }
-        .nav-link-cv:hover {
-            color: #ffffff;
-            background-color: #333333;
-        }
-
-
-        .hero-section-custom {
-            background-image: url('img/background.png'); /* Darker, hacker-themed placeholder */
-            background-size: cover;
-            background-position: center;
-            height: calc(100vh - 50px); /* Full height minus navbar and top border */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: -50px; /* Pull it up to fill space correctly with fixed navbar */
-        }
-        .hero-text-container {
-            background-color: rgba(0,0,0,0.6);
-            padding: 2rem;
-            border-radius: 0.5rem;
-            border: 1px solid #333;
-        }
-
-        .section-title-custom {
-            font-size: 2rem; /* 32px */
-            font-weight: 500;
-            margin-bottom: 2.5rem; /* 40px */
-            color: #1ac2eb; /* Hacker green for titles */
-            text-align: center;
-            font-family: 'Courier New', Courier, monospace; /* Monospace font for titles */
-        }
-        .section-container-spacer {
-            padding-top: 4rem;
-            padding-bottom: 4rem;
-        }
-
-        .card-custom {
-            background-color: #1a1a1a; /* Dark card background */
-            border: 1px solid #333333;
-            border-radius: 0.375rem; /* 6px */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            color: #c7c7c7;
-            display: flex; /* Added for flex layout */
-            flex-direction: column; /* Stack items vertically */
-        }
-        .card-custom:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(26, 255, 0, 0.2); /* Green glow on hover */
-        }
-        .card-custom-content {
-            padding: 1.5rem;
-            flex-grow: 1; /* Allow content to grow */
-            display: flex;
-            flex-direction: column;
-        }
-        .card-custom h3 {
-            color: #1ac2eb; /* Green for card titles */
-        }
-        .card-custom a.btn-discover, .card-custom a.publication-link { /* Specificity for links within cards */
-            color: #33ccff; /* Light blue for links in cards */
-        }
-        .card-custom a.btn-discover:hover, .card-custom a.publication-link:hover {
-            color: #66ddff;
-        }
-        .btn-discover {
-            background-color: transparent;
-            border: 1px solid #1ac2eb;
-            color: #1ac2eb !important; /* Ensure hacker green for button text */
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            text-decoration: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            font-size: 0.9rem;
-            display: inline-block; /* Added for proper styling */
-            margin-top: auto; /* Push button to bottom */
-        }
-        .btn-discover:hover {
-            background-color: #1ac2eb;
-            color: #000000 !important; /* Ensure black text on hover */
-        }
-        .text-content h1, .text-content span {
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .contact-icon {
-            color: #1ac2eb; /* Green icons */
-            margin-right: 0.5rem;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0d0d0d;
-            border-left: 1px solid #333;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1ac2eb;
-            border-radius: 0px; /* Square scrollbar thumb */
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #17cc00;
-        }
-        .skill-tag {
-            background-color: #222;
-            color: #1ac2eb;
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.25rem;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            border: 1px solid #1ac2eb;
-        }
-        .sub-project-tag {
-            background-color: #2a2a2a;
-            color: #a0a0a0;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.2rem;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.75rem;
-            border: 1px solid #444;
-            display: inline-block;
-            margin-right: 0.25rem;
-            margin-bottom: 0.25rem;
-        }
-        .publication-link {
-            color: #33ccff;
-            text-decoration: none;
-            font-size: 0.8rem;
-        }
-        .publication-link:hover {
-            color: #66ddff;
-            text-decoration: underline;
-        }
-
-        /* --- NEW Terminal styles START --- */
-        .terminal-window {
-            background-color: #1a1a1a; /* Dark card background */
-            border: 1px solid #333333;
-            border-radius: 6px;
-            box-shadow: 0 5px 15px rgba(26, 255, 0, 0.1); /* Faint green glow */
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden; /* To keep the rounded corners */
-        }
-        .terminal-header {
-            background-color: #222;
-            border-bottom: 1px solid #333;
-            padding: 0.5rem 1rem;
-            color: #1ac2eb;
-            font-weight: bold;
-        }
-        .terminal-header::before {
-            content: '$ cat ./work_history.log'; /* Example command */
-        }
-        .terminal-content {
-            padding: 1rem 1.5rem;
-            max-height: 450px; /* This is the key! Fixes height */
-            overflow-y: auto; /* This is the key! Adds internal scroll */
-            color: #c7c7c7;
-            line-height: 1.6;
-        }
-        .log-entry {
-            margin-bottom: 0.75rem;
-        }
-        .log-year {
-            color: #1ac2eb; /* Hacker green for the year */
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-        .log-text {
-            color: #c7c7c7;
-        }
-        /* --- NEW Terminal styles END --- */
-
-        /* --- Timeline styles REMOVED --- */
-        
+        :root{--green:#7ab98f;--green-hi:#a8e6c0;--purple:#9b8ec2;--bg:#0a0a0a;--bg-soft:#101010;--card:#131313;--border:#222;
+            --text:#ededed;--muted:#8b8b8b;--grad:linear-gradient(135deg,#7ab98f,#9b8ec2);}
+        *{box-sizing:border-box;}
+        html{scroll-behavior:smooth;}
+        body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+        h1,h2,h3,h4{font-family:'Sora',sans-serif;line-height:1.2;}
+        a{color:inherit;text-decoration:none;}
+        section{scroll-margin-top:80px;}
+        ::selection{background:rgba(155,142,194,.35);color:#fff;}
+        #glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+            background:radial-gradient(520px circle at var(--mx,50%) var(--my,25%),rgba(122,185,143,.06),rgba(155,142,194,.05) 42%,transparent 70%);}
+        .page{position:relative;z-index:1;}
+        ::-webkit-scrollbar{width:9px;} ::-webkit-scrollbar-track{background:var(--bg);}
+        ::-webkit-scrollbar-thumb{background:linear-gradient(var(--green),var(--purple));border-radius:9px;}
+        .wrap{max-width:1100px;margin:0 auto;padding:0 1.5rem;}
+        .section{padding:6rem 0;}
+        .section-title{font-size:2.1rem;font-weight:700;margin:0 0 .3rem;letter-spacing:-.02em;}
+        .section-title .dot{color:var(--purple);}
+        .coordtag{font-size:.72rem;color:var(--muted);letter-spacing:.06em;margin-bottom:1rem;}
+        .coordtag b{color:var(--green);}
+        .section-sub{color:var(--muted);margin:0 0 3rem;}
+        /* nav */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:50;height:60px;display:flex;align-items:center;
+            background:rgba(10,10,10,.65);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+        .nav-in{width:100%;max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;}
+        .brand{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem;}
+        .brand span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+        .nav-links{display:flex;gap:.35rem;align-items:center;}
+        .nav-link{padding:.4rem .65rem;font-size:.9rem;color:var(--muted);position:relative;transition:color .2s;}
+        .nav-link::after{content:'';position:absolute;left:.65rem;right:.65rem;bottom:.15rem;height:2px;background:var(--grad);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .25s;}
+        .nav-link:hover,.nav-link.active{color:var(--text);} .nav-link.active::after{transform:scaleX(1);}
+        .nav-cv{border:1px solid var(--green);color:var(--green);border-radius:8px;padding:.4rem 1rem;font-size:.9rem;font-weight:600;transition:.2s;}
+        .nav-cv:hover{background:var(--green);color:#0a0a0a;}
+        .nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;}
+        .nav-mobile{display:none;flex-direction:column;padding:1rem 1.5rem;background:rgba(10,10,10,.97);border-bottom:1px solid var(--border);}
+        .nav-mobile a{padding:.55rem .2rem;color:var(--muted);}
+        @media(max-width:780px){.nav-links{display:none;}.nav-toggle{display:block;}}
+        /* hero + lorenz */
+        .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
+        .hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+        .hero .vig{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 60% 55% at center,rgba(10,10,10,.5),rgba(10,10,10,.9));}
+        .hero .content{position:relative;z-index:2;width:min(92vw,42rem);}
+        .hero .eyebrow{font-size:.78rem;letter-spacing:.2em;color:var(--green);font-weight:600;margin:0;}
+        .hero h1{font-weight:700;font-size:clamp(2.6rem,7vw,4.6rem);letter-spacing:-.03em;margin:.5rem 0 .3rem;text-shadow:0 2px 30px rgba(0,0,0,.9);}
+        .hero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+        .hero .role{font-family:'Sora',sans-serif;font-weight:500;font-size:clamp(1.05rem,2.6vw,1.5rem);color:#e6e6e6;text-shadow:0 2px 20px rgba(0,0,0,.95);line-height:1.3;min-height:1.7em;}
+        @media(max-width:640px){.hero .role{min-height:3.2em;}}
+        #typed{color:var(--green);} .role-cur{color:var(--purple);margin-left:1px;animation:rolecur 1.05s step-end infinite;} @keyframes rolecur{50%{opacity:0;}}
+        .hero .hudlabel{position:absolute;z-index:2;font-size:.72rem;color:var(--muted);letter-spacing:.05em;}
+        .hudlabel.tl{top:74px;left:1.5rem;} .hudlabel.br{bottom:1.4rem;right:1.5rem;text-align:right;} .hudlabel b{color:var(--green);}
+        .hero-cta{display:flex;justify-content:center;gap:1rem;margin-top:2rem;flex-wrap:wrap;}
+        .btn{padding:.75rem 1.4rem;border-radius:10px;font-weight:600;font-size:.95rem;transition:.22s;}
+        .btn-p{background:var(--grad);color:#0a0a0a;} .btn-p:hover{transform:translateY(-2px);}
+        .btn-g{border:1px solid var(--border);color:var(--text);} .btn-g:hover{border-color:var(--purple);color:var(--purple);}
+        /* about */
+        .about-grid{display:grid;grid-template-columns:280px 1fr;gap:3rem;align-items:start;}
+        .photo-wrap{border-radius:16px;padding:3px;background:var(--grad);}
+        .photo-wrap img{width:100%;border-radius:13px;border:3px solid var(--bg);display:block;}
+        .lead{font-size:1.05rem;color:#cfcfcf;}
+        .sub-head{font-family:'Sora',sans-serif;font-weight:600;color:var(--green);margin:2rem 0 1rem;}
+        .edu-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.9rem;}
+        .edu-item{padding-left:1.2rem;position:relative;}
+        .edu-item::before{content:'';position:absolute;left:0;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--grad);}
+        .edu-item .yr{color:var(--muted);font-size:.88rem;}
+        .skills{display:flex;flex-wrap:wrap;gap:.55rem;}
+        .skill{padding:.35rem .85rem;border-radius:999px;font-size:.85rem;color:#d6d6d6;background:var(--bg-soft);border:1px solid var(--border);transition:.2s;}
+        .skill:hover{border-color:var(--green);color:var(--green);transform:translateY(-2px);}
+        /* now */
+        .now-combo{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+        .ccard{position:relative;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;display:flex;flex-direction:column;transition:.25s;}
+        .ccard:hover{transform:translateY(-4px);border-color:var(--green);}
+        .ccard .tg{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);}
+        .ccard .tt{font-family:'Sora',sans-serif;font-weight:600;font-size:1.1rem;margin:.3rem 0 .5rem;}
+        .ccard .dd{font-size:.85rem;color:var(--muted);flex-grow:1;}
+        .ccard .more{margin-top:1.1rem;align-self:flex-start;font-size:.82rem;font-weight:600;color:var(--green);}
+        .ccard .more:hover{color:var(--purple);}
+        .cstat{position:absolute;top:1.35rem;right:1.3rem;display:inline-flex;align-items:center;gap:.4rem;font-family:'Sora',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+        .cstat i{font-style:normal;}
+        .cstat .d{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:currentColor;}
+        .cstat.green{color:var(--green);}
+        .cstat.amber{color:#d8b46a;}
+        .cstat.blue{color:#6fb0e6;}
+        .cstat.rose{color:#e07f7a;}
+        .cstat.pulse .d{box-shadow:0 0 7px currentColor;animation:cpulse 1.8s ease-in-out infinite;}
+        @keyframes cpulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+        .ccard.feature{grid-column:span 2;} .ccard.wide{grid-column:span 2;}
+        @media(max-width:780px){.now-combo{grid-template-columns:1fr;}.ccard.feature,.ccard.wide{grid-column:auto;}}
+        /* journey — retro CRT */
+        .crt{position:relative;background:#060a08;border:3px solid #2c3a32;border-radius:12px;padding:1.4rem 1.4rem 1.2rem;
+            box-shadow:inset 0 0 60px rgba(122,185,143,.07);overflow:hidden;}
+        .crt::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:12px;
+            background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.22) 3px);}
+        .jhud{display:flex;justify-content:space-between;align-items:center;font-family:'Press Start 2P',monospace;font-size:.58rem;color:var(--green);text-shadow:0 0 6px rgba(122,185,143,.5);margin-bottom:.9rem;}
+        .jbar{display:inline-flex;gap:3px;} .jbar i{width:7px;height:12px;background:#1d2a22;display:inline-block;} .jbar i.on{background:var(--green);box-shadow:0 0 5px var(--green);}
+        #jcv{display:block;width:100%;height:210px;image-rendering:pixelated;cursor:pointer;position:relative;z-index:1;}
+        .jdialog{margin-top:.9rem;border:2px solid #2c3a32;border-radius:6px;background:#040706;padding:.85rem 1rem;height:6.6rem;overflow:hidden;font-family:'VT323',monospace;font-size:1.3rem;line-height:1.25;color:var(--green-hi);text-shadow:0 0 6px rgba(122,185,143,.35);}
+        @media(max-width:780px){.jdialog{height:8.4rem;}}
+        .jdialog .yr{color:var(--purple);} .jblink{animation:bl 1s step-end infinite;} @keyframes bl{50%{opacity:0;}}
+        .jcontrols{display:flex;justify-content:space-between;align-items:center;margin-top:.9rem;}
+        .jbtn{font-family:'Press Start 2P',monospace;font-size:.55rem;color:var(--green);background:transparent;border:2px solid var(--green);border-radius:4px;padding:.55rem .85rem;cursor:pointer;transition:.12s;}
+        .jbtn:hover{background:var(--green);color:#060a08;} .jbtn:disabled{opacity:.3;cursor:not-allowed;}
+        .jmid{font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--muted);}
+        /* contact globe */
+        .contact-grid{display:flex;align-items:center;gap:3rem;flex-wrap:wrap;justify-content:center;}
+        .globe-wrap{width:340px;height:340px;flex-shrink:0;} .globe-wrap canvas{width:100%;height:100%;display:block;}
+        .readout{min-width:280px;}
+        .readout .ln{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border);padding:.7rem 0;font-size:.92rem;}
+        .readout .ln .k{color:var(--muted);font-size:.78rem;letter-spacing:.05em;}
+        .readout .ln a:hover{color:var(--green);}
+        .footer{text-align:center;color:var(--muted);font-size:.85rem;padding:3rem 0 4rem;}
+        /* reveal */
+        body.js .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+        body.js .reveal.visible{opacity:1;transform:none;}
+        @media(max-width:780px){.about-grid{grid-template-columns:1fr;gap:2rem;}.photo-wrap{max-width:260px;}.contact-grid{flex-direction:column;}}
+        /* quirky pubs + chaos popup */
+        .pub-list{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+        .pub-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;display:flex;flex-direction:column;transition:.25s;}
+        .pub-card:hover{border-color:var(--green);transform:translateY(-3px);}
+        .pub-card .ptag{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);}
+        .pub-card .pblurb{margin:.55rem 0 .9rem;color:#d6d6d6;font-size:.96rem;flex-grow:1;}
+        .pub-card .ptitle{font-size:.74rem;color:var(--muted);margin-bottom:.5rem;}
+        .pub-card .pdoi{align-self:flex-start;font-size:.78rem;color:var(--green);font-weight:600;}
+        .pub-card .pdoi:hover{color:var(--purple);}
+        #lorenzLabel{cursor:pointer;} .ql{color:var(--green);font-weight:700;}
+        .chaos-pop{position:fixed;top:108px;left:1.5rem;z-index:40;max-width:340px;background:rgba(12,15,13,.97);border:1px solid var(--green);
+            border-radius:12px;padding:1.2rem 1.3rem;box-shadow:0 14px 44px rgba(0,0,0,.6);opacity:0;transform:translateY(-8px);pointer-events:none;transition:.2s;}
+        .chaos-pop.open{opacity:1;transform:none;pointer-events:auto;}
+        .chaos-pop h4{margin:0 0 .5rem;color:var(--green);font-size:.92rem;}
+        .chaos-pop p{margin:0;font-size:.9rem;color:#cfcfcf;line-height:1.55;}
+        .chaos-close{position:absolute;top:.4rem;right:.7rem;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;line-height:1;}
+        @media(max-width:780px){.pub-list{grid-template-columns:1fr;}}
+        /* live Lorenz sliders */
+        .lz-ctrl{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:1.1rem;align-items:center;flex-wrap:wrap;justify-content:center;
+            background:rgba(10,10,10,.5);backdrop-filter:blur(6px);border:1px solid var(--border);border-radius:999px;padding:.5rem 1.2rem;}
+        .lzc{display:flex;align-items:center;gap:.45rem;font-size:.78rem;color:var(--muted);font-family:'Sora',sans-serif;}
+        .lzc b{color:var(--green);min-width:34px;font-weight:600;}
+        .lz-ctrl input[type=range]{-webkit-appearance:none;width:80px;height:3px;border-radius:3px;background:#2a2a2a;outline:none;}
+        .lz-ctrl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--green);cursor:pointer;}
+        .lz-btn{background:transparent;border:1px solid var(--green);color:var(--green);border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:.9rem;line-height:1;transition:.15s;}
+        .lz-btn:hover{background:var(--green);color:#0a0a0a;}
+        @media(max-width:640px){.lz-ctrl{bottom:.7rem;gap:.55rem;padding:.4rem .8rem;}.lz-ctrl input[type=range]{width:52px;}.lzc{font-size:.68rem;}}
     </style>
 </head>
-<body class="antialiased">
+<body>
+<div id="glow"></div>
+<header class="nav"><div class="nav-in">
+    <a href="#home" class="brand">Bijan <span>Mehr</span></a>
+    <nav class="nav-links">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#now" class="nav-link">Now</a>
+        <a href="#works" class="nav-link">Journey</a>
+        <a href="#publications" class="nav-link">Publications</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <a href="bijanmehr_cv.pdf" target="_blank" class="nav-cv">CV</a>
+    </nav>
+    <button class="nav-toggle" id="menu-button">☰</button>
+</div>
+<div class="nav-mobile" id="mobile-menu">
+    <a href="#home" class="m-link">Home</a><a href="#about" class="m-link">About</a><a href="#now" class="m-link">Now</a>
+    <a href="#works" class="m-link">Journey</a><a href="#publications" class="m-link">Publications</a><a href="#contact" class="m-link">Contact</a>
+    <a href="bijanmehr_cv.pdf" target="_blank" class="m-link">Download CV</a>
+</div>
+</header>
 
-    <div id="site-border-left" class="site-border"></div>
-    <div id="site-border-right" class="site-border"></div>
-    <div id="site-border-top" class="site-border"></div>
-    <div id="site-border-bottom" class="site-border"></div>
-
-    <header class="navbar-custom">
-        <nav class="container mx-auto px-4 flex justify-between items-center">
-            <a href="#home" class="text-lg font-semibold text-white hover:text-gray-300">Bijan_Mehr/></a>
-            <div class="hidden md:flex space-x-1 items-center">
-                <a href="#home" class="nav-link-custom active">01 : Home</a>
-                <a href="#about" class="nav-link-custom">02 : About</a>
-                <a href="#works" class="nav-link-custom">03 : Works</a>
-                <a href="#publications" class="nav-link-custom">04 : Publications</a>
-                <a href="#contact" class="nav-link-custom">05 : Contact</a>
-                <a href="bijanmehr_cv.pdf" target="_blank" id="nav-cv-link" class="nav-link-cv">06 : Download_CV</a>
-            </div>
-            <div class="md:hidden">
-                <button id="menu-button" class="text-white focus:outline-none">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-        </nav>
-        <div id="mobile-menu" class="hidden md:hidden bg-black p-3 absolute w-full top-full left-0 border-t border-gray-700">
-            <a href="#home" class="block nav-link-custom text-center mb-1 mobile-nav-link">01 : Home</a>
-            <a href="#about" class="block nav-link-custom text-center mb-1 mobile-nav-link">02 : About</a>
-            <a href="#works" class="block nav-link-custom text-center mb-1 mobile-nav-link">03 : Works</a>
-            <a href="#publications" class="block nav-link-custom text-center mb-1 mobile-nav-link">04 : Publications</a>
-            <a href="#contact" class="block nav-link-custom text-center mb-1 mobile-nav-link">05 : Contact</a>
-            <a href="bijanmehr_cv.pdf" target="_blank" id="mobile-nav-cv-link" class="block nav-link-cv text-center mobile-nav-link">06 : Download_CV</a>
+<main class="page">
+    <!-- HERO + LORENZ -->
+    <section id="home" class="hero">
+        <canvas id="lz"></canvas><div class="vig"></div>
+        <div class="hudlabel tl" id="lorenzLabel" title="why chaos? (click)"><span id="lorenzPre">LORENZ ATTRACTOR</span> · <b id="lorenzForm">σ=10 ρ=28 β=2.667</b> <span class="ql">(?)</span></div>
+        <div class="chaos-pop" id="chaosPop">
+            <button class="chaos-close" id="chaosClose" aria-label="close">×</button>
+            <h4>// why I'm into chaos</h4>
+            <p>I care about Lorenz and chaos theory because they show how small changes at the micro level can create very different behavior at the macro level. That idea fascinates me because it means the whole system can become unpredictable even when the individual rules are simple.</p>
         </div>
-    </header>
+        <div class="content">
+            <p class="eyebrow">HI, I'M</p>
+            <h1>Bijan <span>Mehr</span></h1>
+            <p class="role"><span id="typed"></span><span class="role-cur">▌</span></p>
+            <div class="hero-cta">
+                <a href="#now" class="btn btn-p">What I'm doing now →</a>
+                <a href="#contact" class="btn btn-g">Get in touch</a>
+            </div>
+        </div>
+        <div class="lz-ctrl">
+            <span class="lzc">σ <input type="range" id="lzSig" min="0" max="20" step="0.5" value="10"><b id="vSig">10.0</b></span>
+            <span class="lzc">ρ <input type="range" id="lzRho" min="0" max="50" step="0.5" value="28"><b id="vRho">28.0</b></span>
+            <span class="lzc">β <input type="range" id="lzBet" min="0" max="4" step="0.01" value="2.67"><b id="vBet">2.67</b></span>
+            <button class="lz-btn" id="lzReset" title="restart drawing">↻</button>
+        </div>
+    </section>
 
-    <main>
-        <section id="home" class="hero-section-custom text-white">
-            <div class="text-center hero-text-container">
-                <div class="text-content">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-3">Hello,<br>
-                        <span id="typed-strings-container">
-                            <span>I'm Bijan</span>
-                            <span>A CS Ph.D. Student</span>
-                            <span>A System Resiliency Researcher</span>
-                            <span>A Mechatronics Engineer</span>
-                            <span>A Roboticist</span>
-                        </span>
-                        <span id="typed"></span>
-                    </h1>
+    <!-- ABOUT -->
+    <section id="about" class="section"><div class="wrap">
+        <h2 class="section-title reveal">About<span class="dot">.</span></h2>
+        <div class="about-grid">
+            <div class="photo-wrap reveal"><img src="img/me.png" alt="Bijan Mehr" onerror="this.onerror=null;this.src='https://placehold.co/400x400/111111/9b8ec2?text=Bijan';"></div>
+            <div class="reveal">
+                <p class="lead">I'm Bijan Mehralizadeh, a first-year Computer Science PhD student at George Washington University with a background in mechatronics engineering. I've tried my hand at being a "full-stack engineer" (a term a lab mate coined for someone who wants to build everything), but right now I'm laying the groundwork for research on making autonomous systems — drones, robots, IoT devices — more resilient and explainable. It's early days, but I'm focused on how these machines can handle failures or attacks without falling apart. When I'm not in class or the lab, you'll find me taking gadgets apart, gaming, or hiking as an outdoor nerd — blissfully forgetting all the bugs I left behind.</p>
+                <h3 class="sub-head">Education</h3>
+                <ul class="edu-list">
+                    <li class="edu-item">Ph.D. Computer Science <span class="yr">— Jan 2025 – Present</span></li>
+                    <li class="edu-item">M.S. Mechatronics Engineering <span class="yr">— 2017 – 2021</span></li>
+                    <li class="edu-item">B.S. Mechatronics Engineering <span class="yr">— 2012 – 2017</span></li>
+                </ul>
+                <h3 class="sub-head">Skills</h3>
+                <div class="skills">
+                    <span class="skill">Python</span><span class="skill">C/C++</span><span class="skill">MATLAB</span><span class="skill">Simulink</span>
+                    <span class="skill">ROS/ROS2</span><span class="skill">Gazebo</span><span class="skill">MoveIt</span><span class="skill">RViz</span>
+                    <span class="skill">TensorFlow</span><span class="skill">PyTorch</span><span class="skill">OpenCV</span><span class="skill">MediaPipe</span>
+                    <span class="skill">Scikit-learn</span><span class="skill">Keras</span>
                 </div>
             </div>
-        </section>
+        </div>
+    </div></section>
 
-        <section id="about" class="section-container-spacer px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto max-w-5xl">
-                <h2 class="section-title-custom">// 02 : About_Me</h2>
-                <div class="grid md:grid-cols-3 gap-8 items-start">
-                    <div class="md:col-span-1">
-                        <img src="img/me.png" alt="Bijan Mehralizadeh" class="rounded-md shadow-lg mx-auto w-full max-w-xs md:max-w-full border-2 border-green-500" onerror="this.onerror=null;this.src='https://placehold.co/400x400/111111/1aff00?text=Bijan';">
-                    </div>
-                    <div class="md:col-span-2 text-base space-y-6">
-                        <p class="leading-relaxed">I’m Bijan Mehralizadeh, a first‑year Computer Science PhD student at George Washington University with a background in mechatronics engineering. I’ve tried my hand at being a “full‑stack engineer” (a term a lab mate coined for someone who wants to build everything), but right now I’m laying the groundwork for research on making autonomous systems—drones, robots, IoT devices—more resilient and explainable. It’s early days, but I’m focused on how these machines can handle failures or attacks without falling apart. When I’m not in class or the lab, you’ll find me taking gadgets apart, gaming, or hiking as an outdoor nerd—blissfully forgetting all the bugs I left behind.</p>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2" style="color: #33ccff;">// Education_Log</h3>
-                            <ul class="list-none space-y-1 pl-4 border-l-2 border-green-500">
-                                <li class="text-sm"><span class="text-green-400 mr-2">&gt;</span>Ph.D. Computer Science (Jan 2025 - Present)</li>
-                                <li class="text-sm"><span class="text-green-400 mr-2">&gt;</span>M.S. Mechatronics Engineering (Sep 2017 - Sep 2021)</li>
-                                <li class="text-sm"><span class="text-green-400 mr-2">&gt;</span>B.S. Mechatronics Engineering (Sep 2012 - Jun 2017)</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-3" style="color: #33ccff;">// Skill_Matrix</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="skill-tag">Python</span><span class="skill-tag">C/C++</span>
-                                <span class="skill-tag">Matlab</span><span class="skill-tag">Simulink</span>
-                                <span class="skill-tag">ROS/ROS2</span><span class="skill-tag">Gazebo</span>
-                                <span class="skill-tag">Moveit</span><span class="skill-tag">Rviz</span>
-                                <span class="skill-tag">TensorFlow</span><span class="skill-tag">OpenCV</span>
-                                <span class="skill-tag">MediaPipe</span><span class="skill-tag">Pytorch</span>
-                                <span class="skill-tag">Scikit</span><span class="skill-tag">Keras</span>
-                                <span class="skill-tag">Keras</span>
-                            </div>
-                        </div>
-                         <p class="text-sm">Access full datastream: <a href="bijanmehr_cv.pdf" id="about-cv-link" target="_blank" class="text-green-400 hover:text-green-300 underline font-medium">Download_CV.pdf</a></p>
-                    </div>
-                </div>
+    <!-- NOW -->
+    <section id="now" class="section"><div class="wrap">
+        <h2 class="section-title reveal">Now<span class="dot">.</span></h2>
+        <p class="section-sub reveal">What I'm building and digging into these days.</p>
+        <div class="now-combo">
+            <div class="ccard feature reveal"><div class="cstat green pulse"><span class="d"></span><i>Live</i></div><div class="tg">Teaching</div><div class="tt">PID control, made interactive</div><div class="dd">A teaching demo I built for an autonomous-systems course — drag the PID gains and watch a car steer through a lane change, in real time.</div><a href="rover_control.html" class="more">Try the demo →</a></div>
+            <div class="ccard reveal"><div class="cstat amber"><span class="d"></span><i>In progress</i></div><div class="tg">Research</div><div class="tt">Multi-agent systems</div><div class="dd">Cooperating agents that hold up under failure and attack.</div></div>
+            <div class="ccard reveal"><div class="cstat blue"><span class="d"></span><i>Planned</i></div><div class="tg">Learning</div><div class="tt">ML &amp; RL for control</div><div class="dd">Picking up reinforcement learning and applying it to control.</div></div>
+            <div class="ccard wide reveal"><div class="cstat green"><span class="d"></span><i>Ongoing</i></div><div class="tg">PhD</div><div class="tt">@ GWU · Systems Security Research Group</div><div class="dd">First year — resilience &amp; security of autonomous systems.</div></div>
+        </div>
+    </div></section>
+
+    <!-- JOURNEY — retro fox stage-select -->
+    <section id="works" class="section" style="background:var(--bg-soft);"><div class="wrap">
+        <h2 class="section-title reveal">Journey<span class="dot">.</span></h2>
+        <div class="crt reveal">
+            <div class="jhud"><span id="jstage">STAGE 01/14</span><span class="jbar" id="jbar"></span><span id="jyr">YEAR 2012</span></div>
+            <canvas id="jcv"></canvas>
+            <div class="jdialog"><span id="jlog"></span><span class="jblink">▮</span></div>
+            <div class="jcontrols"><button class="jbtn" id="jprev">◀ PREV</button><span class="jmid">← / → TO MOVE</span><button class="jbtn" id="jnext">NEXT ▶</button></div>
+        </div>
+    </div></section>
+
+    <!-- PUBLICATIONS -->
+    <section id="publications" class="section"><div class="wrap">
+        <h2 class="section-title reveal">Publications<span class="dot">.</span></h2>
+        <p class="section-sub reveal">The honest one-liners. Mostly autism-screening robots, back in my mechatronics days.</p>
+        <div class="pub-list">
+            <div class="pub-card reveal">
+                <div class="ptag">ICROM · 2023</div>
+                <p class="pblurb">Can a pile of sensors catch autism early? Our first real swing at it — I helped build the multi-modal screening rig, and the early signal looked promising.</p>
+                <span class="ptitle">Multi-modal ASD screening system, a preliminary study</span>
+                <a href="https://doi.org/10.1109/ICRoM60803.2023.10412541" target="_blank" class="pdoi">the formal version →</a>
             </div>
-        </section>
-
-        <section id="works" class="section-container-spacer bg-black bg-opacity-50 px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto max-w-5xl"> <h2 class="section-title-custom">// 03 : Works_History</h2>
-
-                <div class="terminal-window">
-                    <div class="terminal-header"></div>
-                    <div class="terminal-content">
-                        <div class="log-entry">
-                            <span class="log-year">> 2012:</span>
-                            <span class="log-text">started my bachelor in mechatronics engineering</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2013:</span>
-                            <span class="log-text">failed a lot of engineering courses :))</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2014:</span>
-                            <span class="log-text">find my way as a system engineer</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2015:</span>
-                            <span class="log-text">built my first robot</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2016:</span>
-                            <span class="log-text">robotics competitions craziness</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2017:</span>
-                            <span class="log-text">graduate and start my freelance journey<br>started my masters in mechatronics engineering</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2018:</span>
-                            <span class="log-text">start my work in ARIS Lab<br>built my first social robot</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2019:</span>
-                            <span class="log-text">built my first complex system for human robot interaction</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2020:</span>
-                            <span class="log-text">run my trials and data collections</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2021:</span>
-                            <span class="log-text">publish papers and graduate</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2022:</span>
-                            <span class="log-text">actually made some money from ROS and robotics development</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2023:</span>
-                            <span class="log-text">worked as a technical team lead, engineering is not just hard skills!!!!</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2024:</span>
-                            <span class="log-text">worked as the team lead, soft skills are hard!!!</span>
-                        </div>
-                        <div class="log-entry">
-                            <span class="log-year">> 2025:</span>
-                            <span class="log-text">start my PhD in computer science<br>start my work in Systems Security Research Group</span>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="pub-card reveal">
+                <div class="ptag">Sustainability · 2023</div>
+                <p class="pblurb">We stuffed a toy car full of sensors and watched kids play with it — turns out <i>how</i> they drive it carries real autism-screening signal. I built the sensorized car + the feature pipeline.</p>
+                <span class="ptitle">A Sensorized Toy Car for Autism Screening Using Multi-Modal Features</span>
+                <a href="https://doi.org/10.3390/su15107790" target="_blank" class="pdoi">the formal version →</a>
             </div>
-        </section>
-        <section id="publications" class="section-container-spacer px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto max-w-5xl">
-                <h2 class="section-title-custom">// 04 : Publications_Log</h2>
-                <div class="space-y-4">
-                    <div class="card-custom p-4">
-                        <h3 class="text-md font-semibold">Multi-modal ASD screening system, A preliminary study</h3>
-                        <p class="text-xs text-gray-400 italic">Mehralizadeh, B.; Soleiman, P.; Nikkhoo, S.; Rahimi, M.; Kargar, A.; Masoumi, F.: Moradi, H. (2023). International Conference on Robotics and Mechatronics (ICROM).</p>
-                        </div>
-                    <div class="card-custom p-4">
-                        <h3 class="text-md font-semibold">A Sensorized Toy Car for Autism Screening Using Multi-Modal Features</h3>
-                        <p class="text-xs text-gray-400 italic">Mehralizadeh, B.; Baradaran, B.; Nikkhoo, S.; Soleiman, P.; Moradi, H. (2023). Sustainability, 15, 7790.</p>
-                        <a href="https://doi.org/10.3390/su15107790" target="_blank" class="publication-link">DOI:10.3390/su15107790 &gt;</a>
-                    </div>
-                    <div class="card-custom p-4">
-                        <h3 class="text-md font-semibold">Fully robotic social environment for teaching and practicing affective interaction...</h3>
-                        <p class="text-xs text-gray-400 italic">Soleiman P, Moradi H, Mehralizadeh B, Ameri H, Arriaga RI, Pouretemad HR, Baghbanzadeh N and Vahid LK (2023). Frontiers in Robotics and AI, 10:1088582.</p>
-                        <a href="https://doi.org/10.3389/frobt.2023.1088582" target="_blank" class="publication-link">DOI:10.3389/frobt.2023.1088582 &gt;</a>
-                    </div>
-                    <div class="card-custom p-4">
-                        <h3 class="text-md font-semibold">Robotic Social Environments: A Promising Platform for Autism Therapy</h3>
-                        <p class="text-xs text-gray-400 italic">Soleiman, P., Moradi, H., Mehralizadeh, B., Azizi, N., Anjidani, F., Pouretemad, H. R., Arriaga, R. I. (2020). International Conference on Social Robotics (ICSR).</p>
-                        <a href="https://doi.org/10.1007/978-3-030-62056-1_20" target="_blank" class="publication-link">DOI:10.1007/978-3-030-62056-1_20 &gt;</a>
-                    </div>
-                </div>
+            <div class="pub-card reveal">
+                <div class="ptag">Frontiers in Robotics &amp; AI · 2023</div>
+                <p class="pblurb">A whole room of social robots that help kids practice reading and showing emotions. I helped build the system that choreographs the robots.</p>
+                <span class="ptitle">Fully robotic social environment for teaching and practicing affective interaction</span>
+                <a href="https://doi.org/10.3389/frobt.2023.1088582" target="_blank" class="pdoi">the formal version →</a>
             </div>
-        </section>
-
-        <section id="contact" class="section-container-spacer bg-black bg-opacity-70 px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto max-w-3xl text-center">
-                <h2 class="section-title-custom">// 05 : Contact_Channel</h2>
-                <p class="text-base mb-10 leading-relaxed">
-                    Open to new projects, research collaborations, or system integration challenges. Initiate contact sequence.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-md">
-                    <a href="mailto:bijanmehralizadeh@gmail.com" class="hover:text-green-400 transition-colors flex items-center">
-                        <i class="fas fa-envelope contact-icon text-xl"></i>bijanmehralizadeh@gmail.com
-                    </a>
-                     <a href="https://www.linkedin.com/in/bijanmehr/" target="_blank" class="hover:text-green-400 transition-colors flex items-center">
-                        <i class="fab fa-linkedin contact-icon text-xl"></i>linkedin.com/in/bijanmehr
-                    </a>
-                    <a href="https://scholar.google.com/citations?user=KOba2dsAAAAJ" target="_blank" class="hover:text-green-400 transition-colors flex items-center">
-                        <i class="fas fa-graduation-cap contact-icon text-xl"></i>Google_Scholar_Profile
-                    </a>
-                </div>
-                <p class="text-xs text-gray-500 mt-12">&copy; <span id="currentYear"></span> Bijan Mehralizadeh // All_Rights_Reserved // System_Online</p>
+            <div class="pub-card reveal">
+                <div class="ptag">ICSR · 2020</div>
+                <p class="pblurb">The "why bother" paper: making the case that robots are a surprisingly good, low-pressure space for autism therapy. The argument that kicked off all the rest.</p>
+                <span class="ptitle">Robotic Social Environments: A Promising Platform for Autism Therapy</span>
+                <a href="https://doi.org/10.1007/978-3-030-62056-1_20" target="_blank" class="pdoi">the formal version →</a>
             </div>
-        </section>
-    </main>
+        </div>
+        <p class="reveal" style="font-size:.85rem;margin-top:1.5rem;">Full record on <a href="https://scholar.google.com/citations?user=KOba2dsAAAAJ" target="_blank" style="color:var(--green);font-weight:600;">Google Scholar →</a></p>
+    </div></section>
 
-    <script>
-        // Typed.js initialization
-        var typed = new Typed('#typed', {
-            stringsElement: '#typed-strings-container',
-            typeSpeed: 40,
-            backSpeed: 20,
-            backDelay: 1500,
-            loop: true,
-            smartBackspace: true,
-            showCursor: true,
-            cursorChar: '_',
-        });
+    <!-- CONTACT — globe -->
+    <section id="contact" class="section"><div class="wrap">
+        <h2 class="section-title reveal" style="text-align:center;">Let's talk<span class="dot">.</span></h2>
+        <div class="contact-grid">
+            <div class="globe-wrap reveal"><canvas id="gl"></canvas></div>
+            <div class="readout reveal">
+                <div class="ln"><span class="k">LAT / LON</span><span>38.9072°N · 77.0369°W</span></div>
+                <div class="ln"><span class="k">STATION</span><span>GWU · Washington, DC</span></div>
+                <div class="ln"><span class="k">EMAIL</span><a href="mailto:bijan.mehralizadeh@gwu.edu">bijan.mehralizadeh@gwu.edu</a></div>
+                <div class="ln"><span class="k">LINKEDIN</span><a href="https://www.linkedin.com/in/bijanmehr/" target="_blank">/in/bijanmehr →</a></div>
+                <div class="ln"><span class="k">SCHOLAR</span><a href="https://scholar.google.com/citations?user=KOba2dsAAAAJ" target="_blank">Google Scholar →</a></div>
+            </div>
+        </div>
+        <div class="footer">© <span id="year"></span> Bijan Mehr</div>
+    </div></section>
+</main>
 
-        // Mobile menu toggle
-        const menuButton = document.getElementById('menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        menuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                // For regular section links, close menu.
-                // For CV link, it opens in new tab, menu can stay or close. Let's close it.
-                mobileMenu.classList.add('hidden');
-            });
-        });
+<script>
+document.body.classList.add('js');
+const LZ={sig:10,rho:28,bet:2.67};
+let lorenzReset=null;
+const lerp=(a,b,t)=>a+(b-a)*t;
+function fit(cv){const r=cv.getBoundingClientRect();const dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.max(1,Math.floor(r.width*dpr));cv.height=Math.max(1,Math.floor(r.height*dpr));
+    const x=cv.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);cv._w=r.width;cv._h=r.height;return x;}
+function gp(t,a){return `rgba(${lerp(122,155,t)|0},${lerp(185,142,t)|0},${lerp(143,194,t)|0},${a})`;}
+function contoursGP(x,f,levels,x0,y0,cell,cols,rows){const g=[];for(let i=0;i<cols;i++){g[i]=[];for(let j=0;j<rows;j++)g[i][j]=f(x0+i*cell,y0+j*cell);}
+    for(let l=0;l<levels;l++){const thr=-2.2+l*(4.4/levels);x.strokeStyle=gp(l/levels,0.16+0.4*(l/levels));x.lineWidth=1;x.beginPath();
+        for(let i=0;i<cols-1;i++)for(let j=0;j<rows-1;j++){const a=g[i][j],b=g[i+1][j],c=g[i+1][j+1],d=g[i][j+1];
+            const m=(a>thr?1:0)|(b>thr?2:0)|(c>thr?4:0)|(d>thr?8:0);if(m===0||m===15)continue;
+            const X=x0+i*cell,Y=y0+j*cell,ip=(va,vb,p1,p2)=>{const tt=(thr-va)/(vb-va);return [lerp(p1[0],p2[0],tt),lerp(p1[1],p2[1],tt)];};
+            const TL=[X,Y],TR=[X+cell,Y],BR=[X+cell,Y+cell],BL=[X,Y+cell];
+            const eT=()=>ip(a,b,TL,TR),eR=()=>ip(b,c,TR,BR),eB=()=>ip(d,c,BL,BR),eL=()=>ip(a,d,TL,BL);let s=[];
+            switch(m){case 1:case 14:s=[eL(),eT()];break;case 2:case 13:s=[eT(),eR()];break;case 4:case 11:s=[eR(),eB()];break;case 8:case 7:s=[eB(),eL()];break;
+                case 3:case 12:s=[eL(),eR()];break;case 6:case 9:s=[eT(),eB()];break;case 5:s=[eL(),eT(),eR(),eB()];break;case 10:s=[eT(),eR(),eB(),eL()];break;}
+            if(s.length>=2){x.moveTo(s[0][0],s[0][1]);x.lineTo(s[1][0],s[1][1]);if(s.length===4){x.moveTo(s[2][0],s[2][1]);x.lineTo(s[3][0],s[3][1]);}}}
+        x.stroke();}}
 
-        // Smooth scroll for nav links and active state (excluding direct CV link)
-        document.querySelectorAll('a.nav-link-custom[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const headerOffset = document.querySelector('header.navbar-custom').offsetHeight + 10; // 10px top border
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth"
-                    });
+/* hero Lorenz */
+function lorenzHero(cv){const x=fit(cv);const st={mx:.5};
+    cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();st.mx=(e.clientX-r.left)/r.width;});
+    cv.addEventListener('mouseleave',()=>st.mx=.5);
+    let px=0.1,py=0,pz=0;const pts=[];const dt=0.006;
+    lorenzReset=()=>{px=0.1;py=0;pz=0;pts.length=0;};
+    return ()=>{const w=cv._w,h=cv._h;x.clearRect(0,0,w,h);
+        for(let k=0;k<6;k++){const dx=LZ.sig*(py-px),dy=px*(LZ.rho-pz)-py,dz=px*py-LZ.bet*pz;px+=dx*dt;py+=dy*dt;pz+=dz*dt;pts.push([px,py,pz]);}
+        if(pts.length>3000)pts.splice(0,pts.length-3000);
+        const rot=performance.now()*0.00015+(st.mx-0.5)*1.8,cs=Math.cos(rot),sn=Math.sin(rot),sc=Math.min(w,h)/46,cx=w/2,cy=h*0.5;
+        const PX=p=>cx+(p[0]*cs-p[1]*sn)*sc,PY=p=>cy-(p[2]-25)*sc;
+        x.lineWidth=1;x.beginPath();for(let i=0;i<pts.length;i++){const p=pts[i];i?x.lineTo(PX(p),PY(p)):x.moveTo(PX(p),PY(p));}x.strokeStyle=gp(0.5,0.16);x.stroke();
+        x.beginPath();const tail=Math.max(0,pts.length-420);for(let i=tail;i<pts.length;i++){const p=pts[i];i===tail?x.moveTo(PX(p),PY(p)):x.lineTo(PX(p),PY(p));}x.strokeStyle=gp(0.25,0.5);x.lineWidth=1.3;x.stroke();
+        const hp=pts[pts.length-1];x.fillStyle=gp(0.15,0.95);x.beginPath();x.arc(PX(hp),PY(hp),2.6,0,7);x.fill();};}
 
-                    document.querySelectorAll('.nav-link-custom, .nav-link-cv').forEach(navLink => {
-                        navLink.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    document.querySelectorAll('#mobile-menu .nav-link-custom, #mobile-menu .nav-link-cv').forEach(navLink => {
-                        navLink.classList.remove('active');
-                        if (navLink.getAttribute('href') === targetId) {
-                            navLink.classList.add('active');
-                        }
-                    });
-                }
-            });
-        });
-        
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('header.navbar-custom .nav-link-custom:not(.mobile-nav-link)');
-        const allMobileLinks = document.querySelectorAll('#mobile-menu .nav-link-custom');
+/* contact globe */
+function globeContact(cv){const x=fit(cv);const st={mx:.5,my:.5};
+    cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();st.mx=(e.clientX-r.left)/r.width;st.my=(e.clientY-r.top)/r.height;});
+    cv.addEventListener('mouseleave',()=>{st.mx=.5;st.my=.5;});
+    return ()=>{const w=cv._w,h=cv._h;x.clearRect(0,0,w,h);const t=performance.now();
+        const ps=Math.max(6,Math.round(Math.min(w,h)/42)),cx=w/2,gy=h*0.70;
+        // ground line
+        x.strokeStyle=gp(0.32,0.3);x.lineWidth=2;x.setLineDash([ps,ps]);x.beginPath();x.moveTo(w*0.14,gy+3);x.lineTo(w*0.86,gy+3);x.stroke();x.setLineDash([]);
+        // hop every ~4.2s
+        const T=4200,ph=(t%T)/T;let pose='sit',yoff=0;
+        if(ph<0.16){const j=ph/0.16;yoff=Math.sin(j*Math.PI)*ps*4.5;pose='jump';}
+        // shadow
+        x.fillStyle='rgba(0,0,0,0.28)';x.beginPath();x.ellipse(cx,gy+3,Math.max(2,ps*3.4-yoff*0.2),ps*1.05,0,0,7);x.fill();
+        // the fox
+        drawFox(x,cx,gy-yoff,pose,1,ps);
+        // speech bubble
+        const bob=Math.sin(t*0.003)*2,bw=ps*13,bh=ps*4.2,bx=cx-bw*0.30,by=gy-ps*13-bob;
+        x.fillStyle='#0c130e';x.strokeStyle=gp(0.18,0.7);x.lineWidth=1.5;
+        x.beginPath();x.roundRect(bx,by,bw,bh,5);x.fill();x.stroke();
+        x.fillStyle=gp(0.18,0.7);x.beginPath();x.moveTo(bx+ps*1.6,by+bh);x.lineTo(bx+ps*2.6,by+bh+ps*1.6);x.lineTo(bx+ps*3.4,by+bh);x.closePath();x.fill();
+        x.fillStyle=gp(0.05,0.95);x.font=((ps*2.3)|0)+'px VT323, monospace';x.textAlign='center';x.textBaseline='middle';x.fillText("let's talk!",bx+bw/2,by+bh/2+1);x.textBaseline='alphabetic';
+        // hint
+        x.fillStyle=gp(0.4,0.4);x.font='11px VT323, monospace';x.textAlign='center';x.fillText('// drop me a line',cx,h-10);};}
 
+/* journey — retro fox */
+const FOXSIT=["....O.O..","...OOOOO.","L..OEOOO.","LLOOOOOO.",".LOOOOOO.",".LOOOOOO.","..OOOOOO.","..D.DD.D."];
+const FOXJUMP=["L..........O.",".LL......OOOO",".OOOOOOOOOEDO","DLLOOOOOOOOOL","...D......D.."];
+function foxColor(ch){return ch==='O'?'#cf7a3a':ch==='L'?'#f2e3c8':ch==='E'?'#16100c':'#3a2a1c';}
+function drawFox(x,cx,gy,pose,face,ps){ps=ps||4;const S=pose==='jump'?FOXJUMP:FOXSIT,w=S[0].length,h=S.length;
+    for(let r=0;r<h;r++)for(let c=0;c<w;c++){const ch=S[r][c];if(ch==='.')continue;x.fillStyle=foxColor(ch);
+        x.fillRect(Math.round(cx+(c-w/2)*ps*face),Math.round(gy-(h-r)*ps),ps,ps);}}
+function foxJourney(){
+    const cv=document.getElementById('jcv');if(!cv)return null;let x=fit(cv);window.addEventListener('resize',()=>{x=fit(cv);});
+    const J=[[2012,"started my bachelor's in mechatronics engineering"],[2013,"failed a lot of engineering courses :))"],[2014,"found my way as a system engineer"],[2015,"built my first robot"],[2016,"robotics competitions craziness"],[2017,"graduated, went freelance, started my master's"],[2018,"joined ARIS Lab, built my first social robot"],[2019,"built my first complex human-robot interaction system"],[2020,"ran my trials and data collection"],[2021,"published papers and graduated"],[2022,"made real money from ROS & robotics dev"],[2023,"technical team lead - engineering isn't just hard skills"],[2024,"team lead - soft skills are hard!"],[2025,"started my Ph.D. - Systems Security Research Group"]];
+    window.__journey=J;let n=J.length;let cur=0,spriteX=0,jumpP=1,jFrom=0,jTo=0,shown=0,frame=0,face=1,initX=false;
+    const MAR=34,nodeX=i=>MAR+i*((cv._w-MAR*2)/(n-1)),groundY=()=>cv._h*0.6;
+    const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    function update(){document.getElementById('jstage').textContent='STAGE '+String(cur+1).padStart(2,'0')+'/'+n;
+        document.getElementById('jyr').textContent='YEAR '+J[cur][0];let b='';for(let i=0;i<n;i++)b+='<i class="'+(i<=cur?'on':'')+'"></i>';
+        document.getElementById('jbar').innerHTML=b;document.getElementById('jprev').disabled=cur===0;document.getElementById('jnext').disabled=cur===n-1;shown=0;}
+    function setCur(i){i=Math.max(0,Math.min(n-1,i));if(i===cur&&initX)return;face=i>cur?1:(i<cur?-1:face);jFrom=spriteX||nodeX(cur);jTo=nodeX(i);jumpP=0;cur=i;update();}
+    document.getElementById('jprev').addEventListener('click',()=>setCur(cur-1));
+    document.getElementById('jnext').addEventListener('click',()=>setCur(cur+1));
+    cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect();const mx=e.clientX-r.left;let b=1e9,bi=0;for(let i=0;i<n;i++){const d=Math.abs(mx-nodeX(i));if(d<b){b=d;bi=i;}}setCur(bi);});
+    window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){setCur(cur-1);}if(e.key==='ArrowRight'){setCur(cur+1);}});
+    update();
+    window.journeyUpdate=arr=>{if(!arr||!arr.length)return;J.length=0;arr.forEach(e=>J.push(e));n=J.length;cur=Math.max(0,Math.min(cur,n-1));update();};
+    return ()=>{frame++;const gy=groundY();x.clearRect(0,0,cv._w,cv._h);
+        if(!initX){spriteX=nodeX(0);jTo=spriteX;initX=true;}
+        x.fillStyle='#1d2a22';for(let gx=0;gx<cv._w;gx+=10)x.fillRect(gx,gy+10,6,3);
+        x.strokeStyle='rgba(122,185,143,0.25)';x.lineWidth=2;x.beginPath();x.moveTo(nodeX(0),gy);x.lineTo(nodeX(n-1),gy);x.stroke();
+        for(let i=0;i<n;i++){const nx=nodeX(i),on=i===cur,done=i<cur;x.fillStyle=on?'#a8e6c0':done?'#7ab98f':'#324a3c';const s=on?9:6;x.fillRect(Math.round(nx-s/2),Math.round(gy-s/2),s,s);
+            if(on){x.strokeStyle='#a8e6c0';x.lineWidth=1;x.strokeRect(Math.round(nx-7),Math.round(gy-7),14,14);}
+            x.fillStyle=on?'#a8e6c0':'rgba(150,170,158,0.4)';x.font=(on?'bold ':'')+'10px Sora';x.textAlign='center';x.fillText(J[i][0],nx,gy+30);}
+        let pose='sit',yoff=0;
+        if(jumpP<1){jumpP=Math.min(1,jumpP+0.05);const e=ease(jumpP);spriteX=lerp(jFrom,jTo,e);yoff=Math.sin(jumpP*Math.PI)*40;pose='jump';}
+        else{spriteX=jTo;yoff=Math.abs(Math.sin(frame*0.05))*1.5;}
+        drawFox(x,spriteX,gy-yoff,pose,face);
+        if(frame%2===0&&shown<J[cur][1].length)shown++;
+        document.getElementById('jlog').innerHTML='<span class="yr">'+J[cur][0]+' &gt; </span>'+J[cur][1].slice(0,shown);};}
 
-        function changeLinkState() {
-            let index = sections.length;
-            const headerHeight = document.querySelector('header.navbar-custom').offsetHeight + 20; 
+/* typed */
+let ROLES=['CS PhD student @ GWU','Roboticist & mechatronics engineer','Tinkering with ML & RL for control','Researching resilient, secure autonomy'];
+let _typedT=null;
+function initTyped(){if(_typedT)clearTimeout(_typedT);const el=document.getElementById('typed');if(!el)return;const roles=ROLES.slice();let ri=0,ci=0,del=false;
+    (function tick(){const cur=roles[ri%roles.length]||'';
+        if(!del){ci++;el.textContent=cur.slice(0,ci);if(ci>=cur.length){del=true;_typedT=setTimeout(tick,1700);return;}}
+        else{ci--;el.textContent=cur.slice(0,ci);if(ci<=0){del=false;ri++;_typedT=setTimeout(tick,280);return;}}
+        _typedT=setTimeout(tick,del?28:55);})();}
+initTyped();
 
-            while(--index >= 0 && window.scrollY + headerHeight < sections[index].offsetTop) {}
-            
-            index = Math.max(0, index);
+/* live Lorenz parameters (drag the σ/ρ/β sliders) */
+const _lform=document.getElementById('lorenzForm');
+function updateLZlabel(){if(_lform)_lform.textContent='σ='+LZ.sig.toFixed(0)+' ρ='+LZ.rho.toFixed(0)+' β='+LZ.bet.toFixed(2);}
+function bindLZ(id,key,vid,dec){const el=document.getElementById(id),v=document.getElementById(vid);if(!el)return;el.addEventListener('input',()=>{LZ[key]=parseFloat(el.value);if(v)v.textContent=LZ[key].toFixed(dec);updateLZlabel();});}
+bindLZ('lzSig','sig','vSig',1);bindLZ('lzRho','rho','vRho',1);bindLZ('lzBet','bet','vBet',2);updateLZlabel();
+const _rb=document.getElementById('lzReset');if(_rb)_rb.addEventListener('click',()=>{if(lorenzReset)lorenzReset();});
+const _lbl=document.getElementById('lorenzLabel'),_pop=document.getElementById('chaosPop');
+if(_lbl&&_pop){_lbl.addEventListener('click',()=>_pop.classList.toggle('open'));document.getElementById('chaosClose').addEventListener('click',ev=>{ev.stopPropagation();_pop.classList.remove('open');});}
 
-            // Remove active from all nav links first, including CV link if it somehow got it
-            document.querySelectorAll('header.navbar-custom .nav-link-custom, header.navbar-custom .nav-link-cv').forEach(link => link.classList.remove('active'));
-            document.querySelectorAll('#mobile-menu .nav-link-custom, #mobile-menu .nav-link-cv').forEach(link => link.classList.remove('active'));
-            
-            if (navLinks[index]) { // navLinks only contains section links
-                 navLinks[index].classList.add('active');
-            }
-            const activeSectionId = sections[index] ? sections[index].id : null;
-            if (activeSectionId) {
-                const activeMobileLink = document.querySelector(`#mobile-menu .nav-link-custom[href="#${activeSectionId}"]`);
-                if (activeMobileLink) activeMobileLink.classList.add('active');
-            }
-        }
-        
-        if (window.location.hash && document.querySelector(window.location.hash)) { // Check if hash target exists
-            const initialLink = document.querySelector(`header.navbar-custom .nav-link-custom[href="${window.location.hash}"]`);
-            const initialMobileLink = document.querySelector(`#mobile-menu .nav-link-custom[href="${window.location.hash}"]`);
-            if (initialLink) initialLink.classList.add('active');
-            if (initialMobileLink) initialMobileLink.classList.add('active');
-        } else {
-            if (navLinks.length > 0) navLinks[0].classList.add('active'); // Default to Home
-            if (sections.length > 0 && sections[0].id) { 
-                const firstMobileLink = document.querySelector(`#mobile-menu .nav-link-custom[href="#${sections[0].id}"]`);
-                if(firstMobileLink) firstMobileLink.classList.add('active');
-            }
-        }
-        
-        window.addEventListener('scroll', changeLinkState);
-        document.addEventListener('DOMContentLoaded', changeLinkState);
+/* runners + loop */
+const runners=[];
+[['lz',lorenzHero],['gl',globeContact]].forEach(d=>{const cv=document.getElementById(d[0]);if(cv){const draw=d[1](cv);runners.push({cv,draw,vis:true});window.addEventListener('resize',()=>fit(cv));}});
+const foxDraw=foxJourney();if(foxDraw)runners.push({cv:document.getElementById('jcv'),draw:foxDraw,vis:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{const r=runners.find(r=>r.cv===e.target);if(r)r.vis=e.isIntersecting;}),{threshold:0});
+runners.forEach(r=>io.observe(r.cv));
+function loop(){for(const r of runners)if(r.vis){try{r.draw();}catch(e){}}requestAnimationFrame(loop);}requestAnimationFrame(loop);
 
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+/* glow + menu + reveal + nav + year */
+window.addEventListener('mousemove',e=>{document.documentElement.style.setProperty('--mx',e.clientX+'px');document.documentElement.style.setProperty('--my',e.clientY+'px');});
+const mb=document.getElementById('menu-button'),mm=document.getElementById('mobile-menu');
+mb.addEventListener('click',()=>mm.style.display=mm.style.display==='flex'?'none':'flex');
+document.querySelectorAll('.m-link').forEach(l=>l.addEventListener('click',()=>mm.style.display='none'));
+const rev=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');rev.unobserve(e.target);}}),{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>rev.observe(el));
+const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-link');
+const nob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)navLinks.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}),{rootMargin:'-45% 0px -50% 0px'});
+sections.forEach(s=>nob.observe(s));
+document.getElementById('year').textContent=new Date().getFullYear();
 
-        // Keyboard navigation
-        const cvLinkDesktop = document.getElementById('nav-cv-link');
-        // For mobile, the link is part of mobileNavLinks, so no specific element needed here for click simulation.
-
-        document.addEventListener("keydown", function (event) {
-            let targetId = null;
-            let isDirectLink = false;
-            let directLinkElement = null;
-
-            if (event.key === "1") targetId = "#home";
-            if (event.key === "2") targetId = "#about";
-            if (event.key === "3") targetId = "#works";
-            if (event.key === "4") targetId = "#publications";
-            if (event.key === "5") targetId = "#contact";
-            if (event.key === "6") {
-                isDirectLink = true;
-                directLinkElement = cvLinkDesktop; // Use the desktop link for triggering
-            }
-
-            if (targetId && !isDirectLink) {
-                event.preventDefault();
-                const correspondingNavLink = document.querySelector(`header.navbar-custom .nav-link-custom[href="${targetId}"]`);
-                if(correspondingNavLink) correspondingNavLink.click();
-            } else if (isDirectLink && directLinkElement) {
-                event.preventDefault();
-                // For direct links like CV, we can simulate a click or directly open
-                window.open(directLinkElement.href, '_blank');
-            }
-        });
-
-        // --- Intersection Observer for timeline animation REMOVED ---
-        
-    </script>
+/* ===== load published content from content.json ===== */
+(function(){
+    const FIELDS=[['bio','.lead'],['nowSub','#now .section-sub'],
+        ['now1g','.now-combo > div:nth-child(1) .tg'],['now1t','.now-combo > div:nth-child(1) .tt'],['now1d','.now-combo > div:nth-child(1) .dd'],
+        ['now2g','.now-combo > div:nth-child(2) .tg'],['now2t','.now-combo > div:nth-child(2) .tt'],['now2d','.now-combo > div:nth-child(2) .dd'],
+        ['now3g','.now-combo > div:nth-child(3) .tg'],['now3t','.now-combo > div:nth-child(3) .tt'],['now3d','.now-combo > div:nth-child(3) .dd'],
+        ['now4g','.now-combo > div:nth-child(4) .tg'],['now4t','.now-combo > div:nth-child(4) .tt'],['now4d','.now-combo > div:nth-child(4) .dd'],
+        ['pubSub','#publications .section-sub'],
+        ['pub1','.pub-list > div:nth-child(1) .pblurb'],['pub2','.pub-list > div:nth-child(2) .pblurb'],
+        ['pub3','.pub-list > div:nth-child(3) .pblurb'],['pub4','.pub-list > div:nth-child(4) .pblurb'],
+        ['chaos','#chaosPop p']];
+    // status badges on the Now cards: content.json "status":{"now1":"live","now2":"wip",...}
+    // each card's status is a {label,tone,pulse} object; legacy keyword strings still work
+    const LEGACY={live:{label:'Live',tone:'green',pulse:true},wip:{label:'In progress',tone:'amber'},ongoing:{label:'Ongoing',tone:'green'},plan:{label:'Planned',tone:'blue'},done:{label:'Done',tone:'green'}};
+    const TONES={green:1,amber:1,blue:1,rose:1};
+    function applyStatus(i,st){if(st==null)return;const o=typeof st==='string'?LEGACY[st]:st;if(!o)return;
+        const b=document.querySelector('.now-combo > div:nth-child('+(i+1)+') .cstat');if(!b)return;
+        b.className='cstat '+(TONES[o.tone]?o.tone:'')+(o.pulse?' pulse':'');
+        const t=b.querySelector('i');if(t&&o.label!=null)t.textContent=o.label;}
+    fetch('content.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(c=>{if(!c)return;
+        if(c.fields)FIELDS.forEach(([k,sel])=>{const v=c.fields[k];if(v==null)return;const el=document.querySelector(sel);if(el)el.innerHTML=v;});
+        if(c.roles&&JSON.stringify(c.roles)!==JSON.stringify(ROLES)){ROLES=c.roles;initTyped();}
+        if(c.journey&&window.journeyUpdate)window.journeyUpdate(c.journey);
+        if(c.skills){const sk=document.querySelector('.skills');if(sk)sk.innerHTML=c.skills.map(s=>'<span class="skill">'+s+'</span>').join('');}
+        if(c.status)['now1','now2','now3','now4'].forEach((k,i)=>applyStatus(i,c.status[k]));
+    }).catch(()=>{});
+})();
+</script>
 </body>
 </html>

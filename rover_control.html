@@ -3,301 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rover Dynamics Lab - Single File</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React and Babel CDNs -->
+    <title>Rover Lane-Change Lab — PID Control</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        body { background-color: #020617; color: #e2e8f0; margin: 0; font-family: sans-serif; }
-        .tabular-nums { font-variant-numeric: tabular-nums; }
+        :root{--green:#7ab98f;--green-hi:#a8e6c0;--purple:#9b8ec2;--purple-hi:#b9a8e6;--bg:#0a0a0a;--bg-soft:#101010;--card:#131313;--border:#222;--text:#ededed;--muted:#8b8b8b;--warn:#d87a7a;--amber:#d8b46a;--grad:linear-gradient(135deg,#7ab98f,#9b8ec2);}
+        body.light{--green:#1f7a47;--green-hi:#1f7a47;--purple:#5b4d96;--purple-hi:#5b4d96;--bg:#eef1ef;--bg-soft:#e3e8e4;--card:#ffffff;--border:#d2d9d4;--text:#1b211e;--muted:#5a635e;--warn:#c0392b;--amber:#a8731c;--grad:linear-gradient(135deg,#2f8f5b,#6b5ca8);}
+        body.light #glow{background:radial-gradient(600px circle at var(--mx,28%) var(--my,4%),rgba(47,143,91,.05),rgba(107,92,168,.05) 42%,transparent 70%);}
+        body.light .screen{background:#fff;border-color:#d2d9d4;}
+        body.light input[type=range]{background:#d2d9d4;}
+        body.light .btn-primary{color:#fff;}
+        *{box-sizing:border-box;}
+        body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+        h1,h2,h3{font-family:'Sora',sans-serif;margin:0;}
+        #glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(600px circle at var(--mx,28%) var(--my,4%),rgba(122,185,143,.06),rgba(155,142,194,.05) 42%,transparent 70%);}
+        ::selection{background:rgba(155,142,194,.35);color:#fff;}
+        ::-webkit-scrollbar{width:9px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:linear-gradient(var(--green),var(--purple));border-radius:9px;}
+        .app{position:relative;z-index:1;max-width:1480px;margin:0 auto;padding:1.4rem;}
+        .header{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.4rem;margin-bottom:1.2rem;}
+        .header h1{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;}
+        .header h1 b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+        .header .sub{font-size:.72rem;color:var(--muted);margin-top:.25rem;letter-spacing:.03em;}
+        .header .sub b{color:var(--green);font-weight:500;}
+        .actions{display:flex;gap:.6rem;flex-wrap:wrap;}
+        .btn{font-family:'Sora',sans-serif;font-weight:600;font-size:.76rem;border-radius:9px;padding:.6rem 1rem;cursor:pointer;transition:.2s;background:transparent;border:1px solid var(--border);color:var(--text);}
+        .btn:hover{border-color:var(--purple);color:var(--purple);}
+        .btn-primary{background:var(--grad);color:#0a0a0a;border:none;}
+        .btn-primary:hover{transform:translateY(-2px);}
+        .grid{display:grid;grid-template-columns:300px minmax(0,1fr) 290px;gap:1.2rem;align-items:start;}
+        @media(max-width:1240px){.grid{grid-template-columns:1fr;}}
+        .panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;margin-bottom:1.2rem;}
+        .label{font-family:'Sora',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--purple);margin:0 0 1rem;}
+        .srow{margin-bottom:1.05rem;}
+        .srow:last-child{margin-bottom:0;}
+        .shead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.45rem;}
+        .shead .nm{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
+        .shead .nm i{color:#cdcdcd;font-style:normal;}
+        .shead .val{font-family:'Sora',sans-serif;font-size:.92rem;color:var(--green-hi);}
+        input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:#1f1f1f;outline:none;}
+        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--green);cursor:pointer;border:2px solid #0a0a0a;}
+        input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--green);cursor:pointer;border:2px solid #0a0a0a;}
+        .chips{display:grid;gap:.5rem;}
+        .chip{font-family:'Sora',sans-serif;font-size:.74rem;font-weight:600;padding:.6rem .6rem;border-radius:8px;cursor:pointer;transition:.18s;background:var(--bg-soft);border:1px solid var(--border);color:var(--muted);text-align:center;}
+        .chip:hover{color:var(--text);border-color:#333;}
+        .chip.active{border-color:var(--green);color:var(--green);background:rgba(122,185,143,.09);}
+        .chip small{display:block;font-weight:400;font-size:.6rem;color:var(--muted);margin-top:.15rem;letter-spacing:.04em;}
+        .toggle{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:.8rem;color:#cdcdcd;padding:.42rem 0;}
+        .toggle span small{color:var(--muted);}
+        input[type=checkbox]{width:16px;height:16px;accent-color:var(--green);cursor:pointer;}
+        .screen{background:#060807;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+        canvas{display:block;width:100%;height:auto;}
+        .tabs{display:flex;gap:.3rem;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:.25rem;width:fit-content;margin-bottom:.8rem;}
+        .tab{font-family:'Sora',sans-serif;font-size:.72rem;font-weight:600;padding:.45rem .95rem;border-radius:7px;color:var(--muted);cursor:pointer;border:none;background:transparent;transition:.15s;}
+        .tab.active{background:rgba(122,185,143,.12);color:var(--green-hi);}
+        .cap{font-size:.78rem;color:var(--muted);margin:.7rem 2px 0;line-height:1.55;}
+        .cap b{color:#cdcdcd;font-weight:500;}
+        .cap code{font-family:ui-monospace,monospace;color:var(--green);font-size:.74rem;}
+        .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem;}
+        .stat{background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:.6rem .7rem;}
+        .stat .k{font-size:.54rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+        .stat .v{font-family:'Sora',sans-serif;font-weight:700;font-size:1.12rem;margin-top:.25rem;}
+        .stat .v small{font-size:.6rem;color:var(--muted);margin-left:.2rem;font-weight:400;}
+        .tips p{margin:.45rem 0;font-size:.78rem;color:var(--muted);line-height:1.5;}
+        .tips b{color:#cdcdcd;font-weight:500;}
+        .tips .g{color:var(--green);} .tips .p{color:var(--purple-hi);} .tips .a{color:var(--amber);}
     </style>
 </head>
 <body>
+    <div id="glow"></div>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef, useMemo } = React;
+        const { useState, useRef, useEffect } = React;
 
-        // Custom Icon Components
-        const Icons = {
-            Cpu: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>,
-            Activity: ({className}) => <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
-            Play: ({className}) => <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>,
-            RotateCcw: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg>,
-            Zap: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-            CheckCircle: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
-            AlertTriangle: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
-            Target: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
-            TrendingUp: ({className}) => <svg className={className} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
-            Gauge: ({className}) => <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>,
-            ChevronRight: ({className}) => <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        // theme palettes for the canvases (CSS handles the page chrome)
+        const PAL = {
+            dark:  { pageBg:'#060807', road:'#0b1110', edge:'rgba(255,255,255,.08)', dash:'rgba(255,255,255,.13)',
+                     laneLbl:'rgba(255,255,255,.22)', hint:'rgba(255,255,255,.28)', trail:'rgba(122,185,143,.5)', cross:'#b9a8e6',
+                     green:'#a8e6c0', purple:'#b9a8e6', greenLine:'#7ab98f', text:'#8b8b8b', grid:'#13201c', zero:'rgba(255,255,255,.14)',
+                     m180:'#d8b46a', m180line:'rgba(217,180,106,.5)', wcLine:'rgba(122,185,143,.5)', pmLine:'#9b8ec2', warn:'#d87a7a' },
+            light: { pageBg:'#ffffff', road:'#eef1ef', edge:'rgba(0,0,0,.16)', dash:'rgba(0,0,0,.22)',
+                     laneLbl:'rgba(0,0,0,.32)', hint:'rgba(0,0,0,.38)', trail:'rgba(31,122,71,.55)', cross:'#5b4d96',
+                     green:'#1f7a47', purple:'#5b4d96', greenLine:'#2f8f5b', text:'#46504b', grid:'#dde4e0', zero:'rgba(0,0,0,.22)',
+                     m180:'#a8731c', m180line:'rgba(168,115,28,.6)', wcLine:'rgba(31,122,71,.6)', pmLine:'#5b4d96', warn:'#c0392b' },
+        };
+        let TH = PAL.dark;
+
+        // ---------- world (SI units, mapped to pixels) ----------
+        const W = 920, H = 480, PPM = 150, SX = 0.30 * W;
+        const L = 0.32, DMAX = 0.34, DBIAS = 0.06;
+        const N_LANES = 5, LANE_GAP = 0.55;
+        const LANES = Array.from({length:N_LANES}, (_,i)=> (i-(N_LANES-1)/2)*LANE_GAP);  // -1.1 .. 1.1
+        const ROAD = (N_LANES-1)/2*LANE_GAP + 0.30;
+        const clamp = (v,a,b)=> Math.max(a, Math.min(b, v));
+
+        function freshSim(){
+            return { x:0, y:LANES[0], psi:0, delta:0, I:0, lane:0, dir:1, target:LANES[0], v:3, t:0, kicked:false, autoT:0,
+                     trail:[], plot:[], m:{ active:false, t0:0, y0:0, step:1, dir:1, peak:0, peakT:0, rise:null, settle:null, ess:0 } };
+        }
+        function startMetrics(s, target){
+            s.m = { active:true, t0:s.t, y0:s.y, step:Math.max(0.001, Math.abs(target - s.y)),
+                    dir: Math.sign(target - s.y) || 1, peak:0, peakT:0, rise:null, settle:null, ess:0 };
+            s.I = 0;
+        }
+        // advance to the next lane, bouncing at the road edges
+        function trigger(s){
+            let ni = s.lane + s.dir;
+            if (ni > N_LANES-1){ ni = N_LANES-2; s.dir = -1; }
+            else if (ni < 0){ ni = 1; s.dir = 1; }
+            s.lane = ni; s.target = LANES[ni]; startMetrics(s, s.target);
+        }
+        // jump to a specific lane (click)
+        function setLane(s, idx){
+            if (idx === s.lane) return;
+            s.dir = idx > s.lane ? 1 : -1; s.lane = idx; s.target = LANES[idx]; startMetrics(s, s.target);
+        }
+
+        // ---------- PID controller + kinematic bicycle plant ----------
+        function step(s, g, dt){
+            s.t += dt; s.v = g.v;
+            if (!s.kicked && s.t > 1.1){ trigger(s); s.kicked = true; s.autoT = s.t; }
+            if (g.autoCycle && s.t - s.autoT > 3.0){ trigger(s); s.autoT = s.t; }
+            const e = s.target - s.y;                    // cross-track error
+            const ydot = s.v * Math.sin(s.psi);
+            const edot = -ydot;                          // ė
+            const unsat = g.kp*e + g.ki*s.I + g.kd*edot; // δ = Kp e + Ki ∫e + Kd ė
+            const delta = clamp(unsat, -DMAX, DMAX);
+            const saturated = unsat > DMAX || unsat < -DMAX;
+            const pushing  = (unsat > DMAX && e > 0) || (unsat < -DMAX && e < 0);
+            if (!(saturated && pushing)) s.I += e * dt;   // anti-windup (always on, under the hood)
+            s.delta = delta;
+            const deltaEff = delta + (g.dist ? DBIAS : 0);  // disturbance = steering miscalibration
+            s.psi += (s.v / L) * Math.tan(deltaEff) * dt;
+            s.x   += s.v * Math.cos(s.psi) * dt;
+            s.y   += s.v * Math.sin(s.psi) * dt;
+            s.trail.push({ x:s.x, y:s.y }); if (s.trail.length > 460) s.trail.shift();
+            s.plot.push({ t:s.t, e, d:delta }); if (s.plot.length > 700) s.plot.shift();
+            const m = s.m;
+            if (m.active){
+                const el = s.t - m.t0, prog = m.dir>0 ? (s.y-m.y0) : (m.y0-s.y);
+                if (m.rise == null && prog >= 0.9*m.step) m.rise = el;
+                const past = m.dir>0 ? (s.y-s.target) : (s.target-s.y);
+                if (past > m.peak){ m.peak = past; m.peakT = el; }
+                if (Math.abs(s.target - s.y) <= 0.02*m.step){ if (m.settle == null) m.settle = el; } else m.settle = null;
+                if (Math.abs(ydot) < 0.02 && el > 1.0) m.ess = Math.abs(s.target - s.y);
+            }
+        }
+
+        // ---------- viewport ----------
+        const wx = (s,x)=> SX + (x - s.x) * PPM;
+        const wy = (y)=> H/2 + y * PPM;
+
+        function drawScene(ctx, s){
+            ctx.clearRect(0,0,W,H);
+            ctx.fillStyle = TH.pageBg; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = TH.road; ctx.fillRect(0, wy(-ROAD), W, 2*ROAD*PPM);
+            // solid road edges
+            ctx.strokeStyle = TH.edge; ctx.lineWidth = 2;
+            [-ROAD, ROAD].forEach(yy=>{ ctx.beginPath(); ctx.moveTo(0,wy(yy)); ctx.lineTo(W,wy(yy)); ctx.stroke(); });
+            // dashed lane dividers (between lane centres), scrolling to convey speed
+            ctx.strokeStyle = TH.dash; ctx.lineWidth = 2.5;
+            ctx.setLineDash([26,22]); ctx.lineDashOffset = (s.x*PPM)%48;
+            for (let i=0;i<N_LANES-1;i++){ const yy=(LANES[i]+LANES[i+1])/2; ctx.beginPath(); ctx.moveTo(0,wy(yy)); ctx.lineTo(W,wy(yy)); ctx.stroke(); }
+            ctx.setLineDash([]);
+            // lane labels
+            ctx.fillStyle = TH.laneLbl; ctx.font = "10px 'Sora',sans-serif";
+            LANES.forEach((ly,i)=> ctx.fillText('L'+(i+1), 8, wy(ly)+3));
+            // target lane (green glow)
+            ctx.save(); ctx.strokeStyle = TH.greenLine; ctx.lineWidth = 2; ctx.shadowColor = TH.greenLine; ctx.shadowBlur = 10;
+            ctx.setLineDash([10,8]); ctx.beginPath(); ctx.moveTo(0,wy(s.target)); ctx.lineTo(W,wy(s.target)); ctx.stroke(); ctx.restore(); ctx.setLineDash([]);
+            ctx.fillStyle = TH.greenLine; ctx.font = "11px 'Sora',sans-serif"; ctx.fillText('TARGET', W-66, wy(s.target)-8);
+            // trail
+            if (s.trail.length>1){ ctx.strokeStyle=TH.trail; ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.beginPath();
+                s.trail.forEach((p,i)=>{ const X=wx(s,p.x),Y=wy(p.y); i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }); ctx.stroke(); }
+            // cross-track error tick (purple)
+            ctx.strokeStyle = TH.cross; ctx.lineWidth = 1.5; ctx.setLineDash([3,3]);
+            ctx.beginPath(); ctx.moveTo(SX,wy(s.y)); ctx.lineTo(SX,wy(s.target)); ctx.stroke(); ctx.setLineDash([]);
+            // hint
+            ctx.fillStyle = TH.hint; ctx.font = "10px 'Sora',sans-serif";
+            ctx.fillText('click a lane to steer there · ⇄ Lane change to advance', 8, H-10);
+            drawCar(ctx, s);
+        }
+
+        function drawCar(ctx, s){
+            ctx.save(); ctx.translate(SX, wy(s.y)); ctx.rotate(s.psi);
+            const BL=0.52*PPM, hw=0.125*PPM, WB=0.32*PPM, TW=0.255*PPM, twL=0.10*PPM, twW=0.038*PPM;
+            const fl=BL/2, rl=-BL/2;
+            // wheels — rear fixed, front steer to δ
+            const tire=(cx,cy,st)=>{ ctx.save(); ctx.translate(cx,cy); ctx.rotate(st);
+                ctx.fillStyle='#0a0a0a'; ctx.beginPath(); ctx.roundRect(-twL/2,-twW/2,twL,twW,2.5); ctx.fill();
+                ctx.strokeStyle='#1c1c1c'; ctx.lineWidth=1; ctx.stroke(); ctx.restore(); };
+            tire(-WB/2,-TW/2,0); tire(-WB/2,TW/2,0);
+            tire(WB/2,-TW/2,s.delta); tire(WB/2,TW/2,s.delta);
+            // body — tapered car silhouette with a gloss gradient
+            const bg=ctx.createLinearGradient(0,-hw,0,hw);
+            bg.addColorStop(0,'#243a2f'); bg.addColorStop(.5,'#41604e'); bg.addColorStop(1,'#1d2c24');
+            ctx.beginPath();
+            ctx.moveTo(rl+7,-hw); ctx.lineTo(fl-12,-hw);
+            ctx.quadraticCurveTo(fl,-hw, fl,-hw*0.35); ctx.lineTo(fl,hw*0.35);
+            ctx.quadraticCurveTo(fl,hw, fl-12,hw); ctx.lineTo(rl+7,hw);
+            ctx.quadraticCurveTo(rl,hw, rl,hw*0.6); ctx.lineTo(rl,-hw*0.6);
+            ctx.quadraticCurveTo(rl,-hw, rl+7,-hw); ctx.closePath();
+            ctx.fillStyle=bg; ctx.fill(); ctx.strokeStyle='rgba(0,0,0,.5)'; ctx.lineWidth=1.2; ctx.stroke();
+            // cabin / glass greenhouse
+            ctx.fillStyle='#0e1814'; ctx.beginPath(); ctx.roundRect(-BL*0.13,-hw*0.78,BL*0.40,hw*1.56,5); ctx.fill();
+            ctx.fillStyle='rgba(150,185,205,.18)'; ctx.beginPath(); ctx.roundRect(BL*0.15,-hw*0.66,BL*0.10,hw*1.32,3); ctx.fill();   // windshield
+            ctx.fillStyle='rgba(150,185,205,.10)'; ctx.beginPath(); ctx.roundRect(-BL*0.12,-hw*0.62,BL*0.07,hw*1.24,3); ctx.fill();  // rear window
+            // headlights
+            ctx.fillStyle='#f3efcf';
+            ctx.beginPath(); ctx.roundRect(fl-7,-hw+3,5,6,2); ctx.fill();
+            ctx.beginPath(); ctx.roundRect(fl-7,hw-9,5,6,2); ctx.fill();
+            // taillights
+            ctx.fillStyle='#cf463b';
+            ctx.beginPath(); ctx.roundRect(rl+2,-hw+3,3.5,6,1.5); ctx.fill();
+            ctx.beginPath(); ctx.roundRect(rl+2,hw-9,3.5,6,1.5); ctx.fill();
+            // side mirrors
+            ctx.fillStyle='#33493c';
+            ctx.beginPath(); ctx.roundRect(BL*0.10,-hw-3,5,3,1); ctx.fill();
+            ctx.beginPath(); ctx.roundRect(BL*0.10,hw,5,3,1); ctx.fill();
+            ctx.restore();
+        }
+
+        // ---------- TIME response ----------
+        const PB_W = 920, PB_H = 250;
+        function drawTime(ctx, s){
+            ctx.clearRect(0,0,PB_W,PB_H); ctx.fillStyle=TH.pageBg; ctx.fillRect(0,0,PB_W,PB_H);
+            const mid=PB_H/2, amp=PB_H/2*0.8, win=6, t1=s.t, t0=s.t-win;
+            ctx.strokeStyle=TH.grid; ctx.lineWidth=1;
+            for(let i=1;i<4;i++){ const yy=PB_H*i/4; ctx.beginPath(); ctx.moveTo(0,yy); ctx.lineTo(PB_W,yy); ctx.stroke(); }
+            ctx.strokeStyle=TH.zero; ctx.beginPath(); ctx.moveTo(0,mid); ctx.lineTo(PB_W,mid); ctx.stroke();
+            const X=t=>PB_W*(1-(t1-t)/win), pts=s.plot.filter(p=>p.t>=t0);
+            ctx.strokeStyle=TH.green; ctx.lineWidth=1.6; ctx.beginPath();
+            pts.forEach((p,i)=>{ const x=X(p.t),y=mid-clamp(p.d/DMAX,-1,1)*amp; i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.stroke();
+            ctx.strokeStyle=TH.purple; ctx.lineWidth=1.9; ctx.beginPath();
+            pts.forEach((p,i)=>{ const x=X(p.t),y=mid-clamp(p.e/1.0,-1,1)*amp; i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.stroke();
+            ctx.font="11px 'Sora',sans-serif";
+            ctx.fillStyle=TH.purple; ctx.fillText('● cross-track error  (±1.0 m)', 12, 20);
+            ctx.fillStyle=TH.green;  ctx.fillText('● steering δ  (±0.34 rad)', 200, 20);
+            ctx.fillStyle=TH.text;    ctx.fillText('time  (last 6 s) →', PB_W-118, PB_H-12);
+        }
+
+        // ---------- FREQUENCY response (open-loop Bode of L = C·P, P = K/s²) ----------
+        function bode(g){
+            const K=(g.v*g.v)/L, N=160, lo=-1, hi=2;
+            const w=[],mag=[],ph=[];
+            for(let i=0;i<N;i++){
+                const om=Math.pow(10, lo+(hi-lo)*i/(N-1));
+                const re=-K*g.kp/(om*om);
+                const im=-K*(g.kd/om - g.ki/(om*om*om));
+                w.push(om); mag.push(20*Math.log10(Math.hypot(re,im)||1e-9)); ph.push(Math.atan2(im,re)*180/Math.PI);
+            }
+            for(let i=1;i<N;i++){ while(ph[i]-ph[i-1]>180)ph[i]-=360; while(ph[i]-ph[i-1]<-180)ph[i]+=360; }
+            const asym = g.kd>1e-9?-90:(g.kp>1e-9?-180:-270);
+            const sh = Math.round((asym-ph[N-1])/360)*360; for(let i=0;i<N;i++) ph[i]+=sh;
+            let wc=null,pm=null;
+            for(let i=1;i<N;i++){ if(mag[i-1]>=0&&mag[i]<0){ const f=mag[i-1]/(mag[i-1]-mag[i]); wc=w[i-1]*Math.pow(w[i]/w[i-1],f); pm=180+(ph[i-1]+f*(ph[i]-ph[i-1])); break; } }
+            let wp=null,gm=null;
+            for(let i=1;i<N;i++){ if((ph[i-1]+180)*(ph[i]+180)<0){ const f=(-180-ph[i-1])/(ph[i]-ph[i-1]); wp=w[i-1]*Math.pow(w[i]/w[i-1],f); gm=-(mag[i-1]+f*(mag[i]-mag[i-1])); break; } }
+            return {w,mag,ph,wc,pm,gm,wp};
+        }
+        function drawBode(ctx, g){
+            ctx.clearRect(0,0,PB_W,PB_H); ctx.fillStyle=TH.pageBg; ctx.fillRect(0,0,PB_W,PB_H);
+            const b=bode(g), x0=60, x1=PB_W-150;
+            const X=om=> x0+(Math.log10(om)+1)/3*(x1-x0);
+            const mTop=24, mBot=120, dB=80;
+            const YM=v=> mTop+(dB-clamp(v,-dB,dB))/(2*dB)*(mBot-mTop);
+            const pTop=150, pBot=236, pHiD=10, pLoD=-300;
+            const YP=v=> pTop+(pHiD-clamp(v,pLoD,pHiD))/(pHiD-pLoD)*(pBot-pTop);
+            ctx.font="10px 'Sora',sans-serif";
+            ctx.strokeStyle=TH.grid; ctx.fillStyle=TH.text; ctx.lineWidth=1;
+            [0.1,1,10,100].forEach(d=>{ const x=X(d); ctx.beginPath(); ctx.moveTo(x,mTop); ctx.lineTo(x,pBot); ctx.stroke(); ctx.fillText(d+'',x-6,pBot+16); });
+            ctx.fillText('ω (rad/s, log)', x1-40, pBot+16);
+            ctx.fillStyle=TH.text; ctx.fillText('MAGNITUDE (dB)', x0, mTop-9);
+            ctx.strokeStyle=TH.zero; ctx.beginPath(); ctx.moveTo(x0,YM(0)); ctx.lineTo(x1,YM(0)); ctx.stroke();
+            ctx.fillStyle=TH.text; ctx.fillText('0', x0-16, YM(0)+3);
+            ctx.strokeStyle=TH.green; ctx.lineWidth=1.8; ctx.beginPath();
+            b.w.forEach((om,i)=>{ const x=X(om),y=YM(b.mag[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.stroke();
+            ctx.fillStyle=TH.text; ctx.fillText('PHASE (deg)', x0, pTop-9);
+            ctx.strokeStyle=TH.m180line; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(x0,YP(-180)); ctx.lineTo(x1,YP(-180)); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle=TH.m180; ctx.fillText('-180', x0-26, YP(-180)+3);
+            ctx.strokeStyle=TH.purple; ctx.lineWidth=1.8; ctx.beginPath();
+            b.w.forEach((om,i)=>{ const x=X(om),y=YP(b.ph[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.stroke();
+            if(b.wc){ const x=X(b.wc); ctx.strokeStyle=TH.wcLine; ctx.setLineDash([3,4]);
+                ctx.beginPath(); ctx.moveTo(x,mTop); ctx.lineTo(x,pBot); ctx.stroke(); ctx.setLineDash([]);
+                ctx.fillStyle=TH.greenLine; ctx.beginPath(); ctx.arc(x,YM(0),3.5,0,7); ctx.fill();
+                ctx.strokeStyle=TH.pmLine; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x,YP(-180)); ctx.lineTo(x,YP(b.pm-180)); ctx.stroke();
+            }
+            ctx.font="12px 'Sora',sans-serif"; ctx.textAlign='left'; const rx=x1+14;
+            ctx.fillStyle=TH.text; ctx.fillText('ωc', rx, 64); ctx.fillStyle=TH.green; ctx.fillText(b.wc?b.wc.toFixed(2)+' rad/s':'—', rx, 80);
+            ctx.fillStyle=TH.text; ctx.fillText('Phase margin', rx, 110);
+            ctx.fillStyle= b.pm==null?TH.text:(b.pm<30?TH.warn:TH.purple); ctx.font="700 16px 'Sora',sans-serif";
+            ctx.fillText(b.pm==null?'—':b.pm.toFixed(0)+'°', rx, 130);
+            ctx.font="12px 'Sora',sans-serif"; ctx.fillStyle=TH.text; ctx.fillText('Gain margin', rx, 160);
+            ctx.fillStyle=TH.green; ctx.fillText(b.gm==null?'∞':b.gm.toFixed(1)+' dB', rx, 178);
+        }
+
+        // ---------- presets: damping classes ----------
+        // 2nd-order lateral loop:  ÿ + (v²Kd/L)·ẏ + (v²Kp/L)·(y-y_t) = 0
+        //   ω_n = v·√(Kp/L)   and   ζ = v·Kd / (2·√(L·Kp))   →  at v=3, Kp=0.35:  ζ ≈ 4.48·Kd
+        const PRESETS = {
+            'Undamped':          { kp:0.35, ki:0,    kd:0,     v:3, zeta:'ζ = 0 · never settles' },
+            'Underdamped':       { kp:0.35, ki:0,    kd:0.056, v:3, zeta:'ζ ≈ 0.25 · rings, then settles' },
+            'Critically damped': { kp:0.35, ki:0,    kd:0.223, v:3, zeta:'ζ = 1 · fastest, no overshoot' },
+            'Overdamped':        { kp:0.35, ki:0,    kd:0.446, v:3, zeta:'ζ ≈ 2 · slow, no overshoot' },
+            'PID':               { kp:0.35, ki:0.35, kd:0.18,  v:3, zeta:'+ integral · kills bias' },
         };
 
-        const App = () => {
-            const CANVAS_WIDTH = 900;
-            const CANVAS_HEIGHT = 520;
-            const TARGET_Y_TOP = 140;
-            const TARGET_Y_BOTTOM = 380;
-            const ROVER_LENGTH = 75; 
-            const ROVER_WIDTH = 55;
-            const FORWARD_VELOCITY = 2.4; 
+        function Slider({label, sym, value, set, min, max, stp, fmt}){
+            return (
+                <div className="srow">
+                    <div className="shead"><span className="nm">{label} <i>{sym}</i></span><span className="val">{fmt?fmt(value):value.toFixed(2)}</span></div>
+                    <input type="range" min={min} max={max} step={stp} value={value} onChange={e=>set(parseFloat(e.target.value))} />
+                </div>
+            );
+        }
+        function Stat({k, v, unit, color}){
+            return (<div className="stat"><div className="k">{k}</div><div className="v" style={{color:color||'var(--text)'}}>{v}<small>{unit}</small></div></div>);
+        }
 
-            const [dampingType, setDampingType] = useState('critically');
-            const [isSimulating, setIsSimulating] = useState(true);
-            const [roverPos, setRoverPos] = useState({ x: 100, y: TARGET_Y_TOP, vy: 0, heading: 0 });
-            const [targetY, setTargetY] = useState(TARGET_Y_TOP);
-            const [history, setHistory] = useState([]);
-            
-            const [metrics, setMetrics] = useState({
-                startTime: 0, peakTime: null, settlingTime: null,
-                percentOvershoot: 0, steadyStateError: 0, peakY: null, initialStep: 0, peakVal: 0
-            });
+        function App(){
+            const [kp,setKp]=useState(0.35),[ki,setKi]=useState(0),[kd,setKd]=useState(0.056),[v,setV]=useState(3);
+            const [dist,setDist]=useState(false),[autoCycle,setAuto]=useState(true);
+            const [running,setRunning]=useState(true),[plotView,setPlotView]=useState('time'),[theme,setTheme]=useState('dark');
+            const [preset,setPreset]=useState('Underdamped');
+            const [tele,setTele]=useState({e:0,d:0,overshoot:0,rise:null,settle:null,ess:0});
 
-            const requestRef = useRef();
-            const lastTimeRef = useRef();
-            const simTimeRef = useRef(0);
-            const errorIntegralRef = useRef(0);
+            const g=useRef({}); g.current={kp,ki,kd,v,dist,autoCycle,running,plotView,theme};
+            const sim=useRef(freshSim()), view=useRef(), plot=useRef();
+            const doTrigger=()=>trigger(sim.current);
+            const doReset=()=>{ sim.current=freshSim(); };
 
-            const params = useMemo(() => {
-                const k = 0.04; const m = 1.0;
-                const omega_n = Math.sqrt(k / m);
-                let zeta = 1.0; let staticFriction = 0; let ki = 0; 
-                if (dampingType === 'underdamp') zeta = 0.12; 
-                else if (dampingType === 'pid') { zeta = 0.707; ki = 0.0006; }
-                else if (dampingType === 'critically') zeta = 1.0;
-                else if (dampingType === 'overdamp') { zeta = 3.5; staticFriction = 1.6; }
-                return { k, m, omega_n, zeta, staticFriction, ki };
-            }, [dampingType]);
-
-            const toggleLane = () => {
-                const newTarget = targetY === TARGET_Y_TOP ? TARGET_Y_BOTTOM : TARGET_Y_TOP;
-                const startY = roverPos.y;
-                setTargetY(newTarget);
-                setMetrics({
-                    startTime: simTimeRef.current, peakTime: null, settlingTime: null,
-                    percentOvershoot: 0, steadyStateError: 0, peakY: startY,
-                    initialStep: Math.abs(newTarget - startY), peakVal: 0
-                });
-                errorIntegralRef.current = 0; 
+            const onView=e=>{
+                const r=view.current.getBoundingClientRect();
+                const yy=((e.clientY-r.top)/r.height*H - H/2)/PPM;
+                let best=0,bd=1e9; LANES.forEach((ly,i)=>{ const d=Math.abs(ly-yy); if(d<bd){bd=d;best=i;} });
+                setLane(sim.current,best);
             };
 
-            const resetSim = () => {
-                setRoverPos({ x: 100, y: TARGET_Y_TOP, vy: 0, heading: 0 });
-                setTargetY(TARGET_Y_TOP);
-                setHistory([]);
-                simTimeRef.current = 0;
-                errorIntegralRef.current = 0;
-                setMetrics({ startTime: 0, peakTime: null, settlingTime: null, percentOvershoot: 0, steadyStateError: 0, initialStep: 0, peakVal: 0 });
-            };
+            useEffect(()=>{
+                const onMove=e=>{ document.documentElement.style.setProperty('--mx',(e.clientX/innerWidth*100)+'%'); document.documentElement.style.setProperty('--my',(e.clientY/innerHeight*100)+'%'); };
+                window.addEventListener('mousemove',onMove); return ()=>window.removeEventListener('mousemove',onMove);
+            },[]);
 
-            const animate = (time) => {
-                if (lastTimeRef.current !== undefined && isSimulating) {
-                    const dt = Math.min((time - lastTimeRef.current) / 16, 2); 
-                    simTimeRef.current += dt;
-                    setRoverPos(prev => {
-                        const error = prev.y - targetY;
-                        errorIntegralRef.current += error * dt;
-                        
-                        // Handle dynamic damping for 'underdamp' limit cycle behavior
-                        let effectiveZeta = params.zeta;
-                        if (dampingType === 'underdamp') {
-                            // Damping fades as the error approaches zero, preventing steady state.
-                            // This creates a sustained "hunting" oscillation like a slippery road.
-                            effectiveZeta = params.zeta * (1 - Math.exp(-Math.abs(error) / 18));
-                        }
+            useEffect(()=>{ document.body.classList.toggle('light', theme==='light'); },[theme]);
 
-                        const c = 2 * effectiveZeta * params.omega_n * params.m;
-                        const restorativeForce = -params.k * error;
-                        const dampingForce = -c * prev.vy;
-                        const integralForce = -params.ki * errorIntegralRef.current;
-                        
-                        let totalForce = restorativeForce + dampingForce + integralForce;
-                        let ay = 0;
-                        if (params.staticFriction > 0 && Math.abs(totalForce) < params.staticFriction && Math.abs(prev.vy) < 0.01) {
-                            ay = 0;
-                        } else {
-                            const frictionForce = prev.vy !== 0 ? -Math.sign(prev.vy) * (params.staticFriction * 0.45) : 0;
-                            ay = (totalForce + frictionForce) / params.m;
-                        }
-                        const newVy = prev.vy + ay * dt;
-                        const newY = prev.y + newVy * dt;
-                        const newX = (prev.x + FORWARD_VELOCITY * dt) % CANVAS_WIDTH;
-                        const newHeading = Math.atan2(newVy, FORWARD_VELOCITY) * (180 / Math.PI);
-                        const elapsed = simTimeRef.current - metrics.startTime;
-                        const stepSize = metrics.initialStep || 1;
-                        setMetrics(m => {
-                            let updated = { ...m };
-                            if (Math.abs(newVy) < 0.005 && elapsed > 100) updated.steadyStateError = Math.abs(newY - targetY);
-                            const currentOvershoot = targetY === TARGET_Y_TOP ? (targetY - newY) : (newY - targetY);
-                            if (currentOvershoot > (m.peakVal || 0)) {
-                                updated.peakVal = currentOvershoot;
-                                updated.peakTime = elapsed;
-                                updated.percentOvershoot = (currentOvershoot / stepSize) * 100;
-                            }
-                            const errorPercent = (Math.abs(newY - targetY) / stepSize);
-                            
-                            // Adjust settling time criteria for hunting behavior (it never settles)
-                            if (errorPercent <= 0.02 && dampingType !== 'underdamp') { 
-                                if (!updated.settlingTime) updated.settlingTime = elapsed; 
-                            }
-                            else { updated.settlingTime = null; }
-                            return updated;
-                        });
-                        if (newX < prev.x) setHistory([]);
-                        return { x: newX, y: newY, vy: newVy, heading: newHeading };
-                    });
-                    setHistory(prev => {
-                        const updated = [...prev, { x: roverPos.x, y: roverPos.y }];
-                        return updated.length > 250 ? updated.slice(1) : updated;
-                    });
-                }
-                lastTimeRef.current = time;
-                requestRef.current = requestAnimationFrame(animate);
-            };
+            useEffect(()=>{
+                const ctx=view.current.getContext('2d'), pctx=plot.current.getContext('2d');
+                let raf,last,acc=0;
+                const loop=t=>{
+                    raf=requestAnimationFrame(loop);
+                    if(last==null)last=t; let dt=(t-last)/1000; last=t; const gc=g.current; TH = PAL[gc.theme] || PAL.dark;
+                    if(gc.running){ dt=Math.min(dt,0.04); const h=1/240; acc+=dt; while(acc>=h){ step(sim.current,gc,h); acc-=h; } }
+                    drawScene(ctx,sim.current);
+                    gc.plotView==='time' ? drawTime(pctx,sim.current) : drawBode(pctx,gc);
+                    if(!loop._n||t-loop._n>80){ loop._n=t; const s=sim.current,m=s.m;
+                        setTele({ e:(s.target-s.y), d:s.delta, overshoot:m.step?(m.peak/m.step)*100:0, rise:m.rise, settle:m.settle, ess:m.ess }); }
+                };
+                raf=requestAnimationFrame(loop); return ()=>cancelAnimationFrame(raf);
+            },[]);
 
-            useEffect(() => {
-                requestRef.current = requestAnimationFrame(animate);
-                return () => cancelAnimationFrame(requestRef.current);
-            }, [isSimulating, targetY, params, roverPos, metrics.startTime]);
-
-            const profiles = {
-                underdamp: { title: "underdamp", zeta: 0.12, color: "text-rose-400", stroke: "#fb7185", icon: Icons.Activity, desc: "Frictionless 'hunting' behavior mimicking a slippery road." },
-                pid: { title: "PID Controller", zeta: 0.707, color: "text-amber-400", stroke: "#fbbf24", icon: Icons.Zap, desc: "Optimized response with error correction." },
-                critically: { title: "critically dampt", zeta: 1.00, color: "text-emerald-400", stroke: "#34d399", icon: Icons.CheckCircle, desc: "Fastest non-oscillatory path." },
-                overdamp: { title: "overdamp", zeta: 3.50, color: "text-sky-400", stroke: "#38bdf8", icon: Icons.AlertTriangle, desc: "Sluggish response prone to stalling." }
-            };
+            const applyPreset=name=>{ const p=PRESETS[name]; setPreset(name); setKp(p.kp); setKi(p.ki); setKd(p.kd); setV(p.v); setDist(name==='PID'); };
 
             return (
-                <div className="min-h-screen p-4 md:p-6 bg-[#020617]">
-                    <div className="max-w-[1500px] mx-auto space-y-6">
-                        {/* MINIMAL HEADER */}
-                        <div className="flex flex-col md:flex-row items-center justify-between bg-slate-900/40 border border-slate-800 rounded-[2rem] px-8 py-5 backdrop-blur-xl gap-6">
-                            <div className="flex items-center gap-5">
-                                <div className="p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-2xl"><Icons.Cpu /></div>
-                                <div>
-                                    <h1 className="text-base font-black tracking-tight text-white leading-none uppercase">Rover Dynamics Lab</h1>
-                                    <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1.5 leading-tight">developed by bijan mehr with GEMINI ❤️</p>
-                                </div>
-                            </div>
-                            
-                            <div className="flex items-center gap-12 font-mono">
-                                <div className="text-center">
-                                    <div className="text-[9px] text-slate-500 uppercase font-bold tracking-tight mb-0.5">Damping (ζ)</div>
-                                    <div className={`text-lg font-bold tabular-nums ${profiles[dampingType].color}`}>{params.zeta.toFixed(3)}</div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-[9px] text-slate-500 uppercase font-bold tracking-tight mb-0.5">Nat. Freq (ωn)</div>
-                                    <div className="text-lg font-bold text-white tabular-nums">{params.omega_n.toFixed(3)} <span className="text-[9px] text-slate-500">rad/s</span></div>
-                                </div>
-                            </div>
+                <div className="app">
+                    <div className="header">
+                        <div>
+                            <h1>Rover <b>Lane-Change</b> Lab</h1>
+                            <div className="sub">PID lane-keeping control · <b>built by Bijan Mehr</b></div>
+                        </div>
+                        <div className="actions">
+                            <button className="btn" onClick={()=>setTheme(t=>t==='dark'?'light':'dark')}>{theme==='dark'?'☀ Light':'☾ Dark'}</button>
+                            <button className="btn" onClick={()=>setRunning(r=>!r)}>{running?'❚❚ Pause':'▶ Resume'}</button>
+                            <button className="btn" onClick={doReset}>↻ Reset</button>
+                            <button className="btn btn-primary" onClick={doTrigger}>⇄ Lane change</button>
+                        </div>
+                    </div>
 
-                            <div className="flex items-center gap-3">
-                                <button onClick={() => setIsSimulating(!isSimulating)} className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all font-black text-[10px] uppercase">
-                                    {isSimulating ? <Icons.Activity className="text-emerald-400" /> : <Icons.Play className="text-sky-400" />}
-                                    {isSimulating ? "Pause" : "Resume"}
-                                </button>
-                                <button onClick={resetSim} className="p-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all"><Icons.RotateCcw /></button>
+                    <div className="grid">
+                        <div>
+                            <div className="panel">
+                                <div className="label">Controller gains</div>
+                                <Slider label="Proportional" sym="Kp" value={kp} set={setKp} min={0} max={1.0} stp={0.01}/>
+                                <Slider label="Integral" sym="Ki" value={ki} set={setKi} min={0} max={1.5} stp={0.01}/>
+                                <Slider label="Derivative" sym="Kd" value={kd} set={setKd} min={0} max={0.6} stp={0.005} fmt={x=>x.toFixed(3)}/>
+                                <Slider label="Speed" sym="v" value={v} set={setV} min={0.5} max={6} stp={0.1} fmt={x=>x.toFixed(1)+' m/s'}/>
+                            </div>
+                            <div className="panel">
+                                <div className="label">Damping presets</div>
+                                <div className="chips">{Object.keys(PRESETS).map(n=>(
+                                    <div key={n} className={'chip'+(preset===n?' active':'')} onClick={()=>applyPreset(n)}>{n}<small>{PRESETS[n].zeta}</small></div>
+                                ))}</div>
+                            </div>
+                            <div className="panel">
+                                <div className="label">Disturbance &amp; motion</div>
+                                <label className="toggle"><span>Steering miscalibration <small>(+{DBIAS.toFixed(2)} rad)</small></span><input type="checkbox" checked={dist} onChange={e=>setDist(e.target.checked)}/></label>
+                                <label className="toggle"><span>Auto-cycle lanes</span><input type="checkbox" checked={autoCycle} onChange={e=>setAuto(e.target.checked)}/></label>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-12 gap-6 items-start">
-                            {/* LEFT PANEL - CONFIG */}
-                            <div className="col-span-12 xl:col-span-2 space-y-4">
-                                <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-2 mb-2">Configurations</h3>
-                                {Object.keys(profiles).map(key => {
-                                    const Icon = profiles[key].icon;
-                                    const active = dampingType === key;
-                                    return (
-                                        <button key={key} onClick={() => { setDampingType(key); resetSim(); }} className={`w-full group p-4 rounded-3xl border transition-all text-left relative overflow-hidden ${active ? `bg-slate-800/80 border-slate-500 shadow-xl` : 'bg-slate-900/30 border-slate-800 hover:border-slate-700'}`}>
-                                            <div className="flex items-start gap-4 relative z-10">
-                                                <div className={`p-2 rounded-xl shrink-0 ${active ? 'bg-slate-900' : 'bg-slate-800/50 group-hover:bg-slate-800'}`}><Icon className={active ? profiles[key].color : 'text-slate-600'} /></div>
-                                                <div>
-                                                    <div className={`text-[11px] font-black uppercase mb-0.5 ${active ? 'text-white' : 'text-slate-400'}`}>{profiles[key].title}</div>
-                                                    <p className="text-[9px] text-slate-500 font-medium leading-relaxed">{profiles[key].desc}</p>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    );
-                                })}
+                        <div>
+                            <div className="screen" style={{marginBottom:'1.2rem'}}><canvas ref={view} width={W} height={H} onClick={onView} style={{cursor:'pointer'}}></canvas></div>
+                            <div className="tabs">
+                                <button className={'tab'+(plotView==='time'?' active':'')} onClick={()=>setPlotView('time')}>Time response</button>
+                                <button className={'tab'+(plotView==='freq'?' active':'')} onClick={()=>setPlotView('freq')}>Frequency response</button>
                             </div>
+                            <div className="screen"><canvas ref={plot} width={PB_W} height={PB_H}></canvas></div>
+                            {plotView==='time'
+                                ? <p className="cap"><b>Time domain.</b> Lateral error (purple) and steering δ (green) after a lane change. <b>Undamped</b> (ζ=0) rings forever and never settles; <b>underdamped</b> (0&lt;ζ&lt;1) overshoots and rings but still converges; <b>critically damped</b> (ζ=1) is the fastest with no overshoot; <b>overdamped</b> crawls in.</p>
+                                : <p className="cap"><b>Frequency domain.</b> Open-loop Bode of <code>L(s)=C(s)·P(s)</code>, plant <code>P(s)=v²/L · 1/s²</code>. The <b>phase margin</b> at gain-crossover sets the damping — underdamped reads a small margin, overdamped a large one.</p>}
+                        </div>
 
-                            {/* CENTER - VIEWPORT (ENV SECTION) - ENLARGED */}
-                            <div className="col-span-12 xl:col-span-7 space-y-6">
-                                <div className="relative bg-[#000] rounded-[2.5rem] border-[6px] border-slate-900 shadow-2xl overflow-hidden ring-1 ring-slate-800/50">
-                                    <svg viewBox={`0 0 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}`} className="w-full h-auto">
-                                        <rect width={CANVAS_WIDTH} height={CANVAS_HEIGHT} fill="#020617" />
-                                        <rect x="0" y={TARGET_Y_TOP-20} width={CANVAS_WIDTH} height="40" fill="#ffffff03" rx="10" />
-                                        <rect x="0" y={TARGET_Y_BOTTOM-20} width={CANVAS_WIDTH} height="40" fill="#ffffff03" rx="10" />
-                                        <line x1="0" y1={targetY} x2={CANVAS_WIDTH} y2={targetY} stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="10,5" opacity="0.3" />
-                                        <polyline points={history.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke={profiles[dampingType].stroke} strokeWidth="3.5" strokeLinecap="round" opacity="0.9" />
-                                        <g transform={`translate(${roverPos.x}, ${roverPos.y}) rotate(${roverPos.heading})`}>
-                                            <g transform={`translate(${-ROVER_LENGTH/2}, ${-ROVER_WIDTH/2})`}>
-                                                <rect width={ROVER_LENGTH} height={ROVER_WIDTH} rx="8" fill="#1e293b" stroke="#475569" strokeWidth="2" />
-                                                <circle cx={ROVER_LENGTH-15} cy={ROVER_WIDTH/2} r="8" fill="#475569" />
-                                                <circle cx={ROVER_LENGTH-15} cy={ROVER_WIDTH/2} r="3" fill="#ef4444" />
-                                                {[8, 32, 56].map(x => [-8, ROVER_WIDTH].map(y => (
-                                                    <rect key={`${x}-${y}`} x={x} y={y} width="14" height="8" rx="2" fill="#020617" />
-                                                )))}
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
+                        <div>
+                            <div className="label" style={{marginLeft:'2px'}}>Time-domain metrics</div>
+                            <div className="stat-grid">
+                                <Stat k="Overshoot" v={tele.overshoot.toFixed(1)} unit="%" color={tele.overshoot>20?'var(--warn)':'var(--green-hi)'}/>
+                                <Stat k="Steady-state err" v={(tele.ess*100).toFixed(1)} unit="cm" color={tele.ess>0.03?'var(--amber)':'var(--green-hi)'}/>
+                                <Stat k="Rise time" v={tele.rise!=null?tele.rise.toFixed(2):'—'} unit="s" color="var(--purple-hi)"/>
+                                <Stat k="Settling time" v={tele.settle!=null?tele.settle.toFixed(2):'∞'} unit="s" color="var(--purple-hi)"/>
                             </div>
-
-                            {/* RIGHT PANEL - TELEMETRY & TRIGGER BUTTON */}
-                            <div className="col-span-12 xl:col-span-3 space-y-6">
-                                <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-2 mb-2">Live Telemetry</h3>
-                                <div className="bg-slate-900/50 border border-slate-800 rounded-[2rem] p-6 space-y-6 shadow-xl">
-                                    <div className="space-y-3">
-                                        <div className="text-[9px] font-bold uppercase text-slate-500">Peak Overshoot (%)</div>
-                                        <div className="text-4xl font-black font-mono text-white tracking-tighter tabular-nums">{metrics.percentOvershoot.toFixed(2)}<span className="text-lg text-slate-600 ml-1">%</span></div>
-                                        <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                                            <div className={`h-full transition-all duration-500 ${metrics.percentOvershoot > 15 ? 'bg-rose-500' : 'bg-emerald-500'}`} style={{ width: `${Math.min(100, metrics.percentOvershoot * 2.5)}%` }} />
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800/50">
-                                        <div className="space-y-1.5">
-                                            <div className="text-[8px] font-bold uppercase text-slate-500">Peak Time (Tp)</div>
-                                            <div className="text-lg font-mono font-bold text-blue-400 tabular-nums">{metrics.peakTime ? (metrics.peakTime * 0.016).toFixed(2) : '--'}<span className="text-[9px] ml-1">s</span></div>
-                                        </div>
-                                        <div className="space-y-1.5">
-                                            <div className="text-[8px] font-bold uppercase text-slate-500">Settling Time (Ts)</div>
-                                            <div className="text-lg font-mono font-bold text-emerald-400 tabular-nums">{metrics.settlingTime ? (metrics.settlingTime * 0.016).toFixed(2) : 'INF'}<span className="text-[9px] ml-1">s</span></div>
-                                        </div>
-                                    </div>
-
-                                    <div className="pt-4 border-t border-slate-800/50">
-                                        <div className="text-[8px] font-bold uppercase text-slate-500 mb-2">Steady-State Error (Ess)</div>
-                                        <div className="text-xl font-mono font-bold text-white tabular-nums">{metrics.steadyStateError.toFixed(3)}<span className="text-xs text-slate-600 ml-1 uppercase">PX</span></div>
-                                    </div>
-                                </div>
-
-                                {/* TRIGGER BUTTON - NEW LOCATION */}
-                                <div className="pt-4">
-                                    <button 
-                                        onClick={toggleLane} 
-                                        className="w-full group relative px-8 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95 overflow-hidden"
-                                    >
-                                        <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                        <span className="relative z-10 flex items-center justify-center gap-4">
-                                            <Icons.Target className="group-hover:rotate-45 transition-transform" />
-                                            TRIGGER_LANE_CHANGE
-                                        </span>
-                                    </button>
-                                </div>
+                            <div className="label" style={{marginLeft:'2px'}}>Live</div>
+                            <div className="stat-grid">
+                                <Stat k="Cross-track e" v={(tele.e*100).toFixed(1)} unit="cm" color="var(--purple-hi)"/>
+                                <Stat k="Steering δ" v={(tele.d*57.3).toFixed(1)} unit="°" color="var(--green-hi)"/>
+                            </div>
+                            <div className="panel tips">
+                                <div className="label">Try this</div>
+                                <p><b className="g">Undamped</b> (ζ=0) → pure sustained oscillation; never converges (0° phase margin).</p>
+                                <p><b className="g">Underdamped</b> → overshoots and rings, then settles.</p>
+                                <p><b className="g">Critically damped</b> → snaps in, no overshoot.</p>
+                                <p><b className="g">Overdamped</b> → safe but sluggish.</p>
+                                <p>Turn on <b className="a">miscalibration</b> → P/PD settle <i>off</i> the lane; switch to <b className="g">PID</b> and the offset is driven to zero.</p>
+                                <p>Flip to <b className="p">Frequency response</b> — the phase margin tracks the overshoot.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        }
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 </body>
 </html>

@@ -1,0 +1,66 @@
+{
+  "_readme": "This is your content file. Edit the text below and commit it — the site reads it on load. Prose fields accept HTML (e.g. <i>italic</i>, <a href=''>links</a>).",
+
+  "roles": [
+    "CS PhD student @ GWU",
+    "Roboticist & Mechatronics engineer",
+    "Tinkering with ML & RL for control",
+    "Researching resilient autonomy"
+  ],
+
+  "skills": ["Python", "C/C++", "MATLAB", "Simulink", "ROS/ROS2", "Gazebo", "MoveIt", "RViz", "TensorFlow", "PyTorch", "OpenCV", "MediaPipe", "Scikit-learn", "Keras", "JAX"],
+
+  "journey": [
+  [2012, "Started my bachelor's in mechatronics engineering"],
+  [2013, "Failed a lot of engineering courses :))"],
+  [2014, "Found my way as a systems engineer"],
+  [2015, "Built my first robot"],
+  [2016, "Robotics competitions, pure chaos"],
+  [2017, "Graduated, went freelance, started my master's"],
+  [2018, "Joined ARIS Lab, built my first social robot"],
+  [2019, "Built my first complex human-robot interaction system"],
+  [2020, "Ran my trials and collected the data"],
+  [2021, "Published the papers and finished my master's"],
+  [2022, "Finally made real money from ROS and robotics dev"],
+  [2023, "Technical team lead: engineering isn't only hard skills"],
+  [2024, "Still leading, and soft skills are the hard ones!"],
+  [2025, "Started my PhD in the Systems Security Research Group @ GWU"]
+  ],
+
+  "_status_help": "Now-card badges. Each card: { label: any text you want, tone: green | amber | blue | rose, pulse: true/false }.",
+  "status": {
+    "now1": { "label": "Done", "tone": "green", "pulse": false },
+    "now2": { "label": "In progress", "tone": "rose", "pulse": true },
+    "now3": { "label": "Active", "tone": "blue", "pulse": true },
+    "now4": { "label": "Ongoing", "tone": "amber", "pulse": false }
+  },
+
+  "fields": {
+    "bio": "I'm Bijan, and I'm somewhere in the middle of a PhD in CS. For a while I tried my hand at being a ''full-stack engineer'' (a term I borrowed from a labmate for someone who wants to build everything). Right now I'm laying the groundwork for research on making autonomous systems more resilient, especially when they have to work as a team rather than alone. What I find interesting is the micro versus macro of it: what a single agent does on its own, and what the whole group does together, especially how the group holds up when some of its members fail or misbehave, for whatever reason. I also have a thing for math, sometimes the practical kind that actually helps my research, and sometimes the totally abstract, useless kind I just enjoy for its own sake, like watching a random video on it or poking at a math olympiad problem. Outside the lab, I like taking gadgets apart, sometimes gaming, and getting outdoors as much as I can to touch some grass.",
+
+    "nowSub": "What I'm building and digging into these days.",
+    "now1g": "Teaching",
+    "now1t": "Rover control demo",
+    "now1d": "An interactive demo for control theory concepts.",
+
+    "now2g": "Research",
+    "now2t": "Multi-agent Simulator",
+    "now2d": "A custom multi-agent simulator for testing adversarial misbehavior in collaborative scenarios.",
+
+    "now3g": "Learning",
+    "now3t": "ML &amp; RL for control",
+    "now3d": "If learning is just optimization, a trained network is already a controller you computed ahead of time. I want the cleanest possible path from that policy to the actual control loop.",
+
+    "now4g": "Research",
+    "now4t": "Error propagation in multi-agent systems",
+    "now4d": "How does a single agent's misbehavior affect the whole system? Is there any mapping from the micro to the macro, or is it just chaos?",
+
+    "pubSub": "The honest version.",
+    "pub1": "Three gadgets, one ROS pipeline, and zero personal growth. I wired a few of them together and fused their outputs into an autism screen that beats any single one by over 10%, which sounds impressive until you remember I also built the single ones it's beating. So it turns out averaging enough of my own mistakes cancels out about 10% of them, and that's the contribution.",
+    "pub2": "Years of engineering training, deployed to teach a toy car to size up how toddlers play. I built the circuits and firmware, trained a multimodal model on a few minutes of play per kid, and somehow it screens for autism at about 85%, which makes it roughly 85% more reliable than most of my life choices.",
+    "pub3": "I turned a parrot toy and a fluffy toy into two robots, wired them together over ROS, and made them hold scripted conversations about feelings while kids with autism watched and, against the odds, learned to read emotions. My role, formally, was robot puppeteer. The two parrots now have more consistent conversations than I do.",
+    "pub4": "The science and the argument belonged to the lab. My role was humbler: I made the system. While everyone else thought about observational learning, I made sure two parrot robots powered up, stayed connected, and said their lines on cue. Not a single model from me, just a lot of quietly begging a parrot to work before each session.",
+
+    "chaos": "What I like about Lorenz is it shows that simple deterministic rules can make any single trajectory unpredictable, while the system as a whole still settles onto one stable shape. Metaphoricly it is what I have in micro vs macro framing."
+  }
+}
