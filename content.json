@@ -32,7 +32,8 @@
     "now1": { "label": "Done", "tone": "green", "pulse": false },
     "now2": { "label": "In progress", "tone": "rose", "pulse": true },
     "now3": { "label": "Active", "tone": "blue", "pulse": true },
-    "now4": { "label": "Ongoing", "tone": "amber", "pulse": false }
+    "now4": { "label": "Ongoing", "tone": "amber", "pulse": false },
+    "now5": { "label": "In progress", "tone": "rose", "pulse": true }
   },
 
   "fields": {
@@ -54,6 +55,10 @@
     "now4g": "Research",
     "now4t": "Error propagation in multi-agent systems",
     "now4d": "How does a single agent's misbehavior affect the whole system? Is there any mapping from the micro to the macro, or is it just chaos?",
+
+    "now5g": "Building",
+    "now5t": "MultiLander",
+    "now5d": "RL env inspired by the classic Lunar Lander, kept as simple as possible to focus on multi-agent dynamics on the next step.",
 
     "pubSub": "The honest version.",
     "pub1": "Three gadgets, one ROS pipeline, and zero personal growth. I wired a few of them together and fused their outputs into an autism screen that beats any single one by over 10%, which sounds impressive until you remember I also built the single ones it's beating. So it turns out averaging enough of my own mistakes cancels out about 10% of them, and that's the contribution.",

@@ -81,12 +81,13 @@
         .now-combo{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
         .ccard{position:relative;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;display:flex;flex-direction:column;transition:.25s;}
         .ccard:hover{transform:translateY(-4px);border-color:var(--green);}
-        .ccard .tg{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);}
+        .ccard .tg{font-family:'Press Start 2P',monospace;font-size:.5rem;letter-spacing:0;line-height:1.5;text-transform:uppercase;color:var(--purple);display:inline-flex;align-items:center;gap:.5rem;}
+        .ccard .tg::before{content:'';width:8px;height:8px;flex-shrink:0;background:radial-gradient(currentColor 40%,transparent 42%) 0 0/4px 4px;}
         .ccard .tt{font-family:'Sora',sans-serif;font-weight:600;font-size:1.1rem;margin:.3rem 0 .5rem;}
         .ccard .dd{font-size:.85rem;color:var(--muted);flex-grow:1;}
         .ccard .more{margin-top:1.1rem;align-self:flex-start;font-size:.82rem;font-weight:600;color:var(--green);}
         .ccard .more:hover{color:var(--purple);}
-        .cstat{position:absolute;top:1.35rem;right:1.3rem;display:inline-flex;align-items:center;gap:.4rem;font-family:'Sora',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+        .cstat{position:absolute;top:1.5rem;right:1.3rem;z-index:2;display:inline-flex;align-items:center;gap:.45rem;font-family:'Press Start 2P',monospace;font-size:.45rem;letter-spacing:0;text-transform:uppercase;color:var(--muted);}
         .cstat i{font-style:normal;}
         .cstat .d{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:currentColor;}
         .cstat.green{color:var(--green);}
@@ -95,6 +96,8 @@
         .cstat.rose{color:#e07f7a;}
         .cstat.pulse .d{box-shadow:0 0 7px currentColor;animation:cpulse 1.8s ease-in-out infinite;}
         @keyframes cpulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+        .tile-bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5;}
+        .ccard > :not(.tile-bg):not(.cstat){position:relative;z-index:1;}
         .ccard.feature{grid-column:span 2;} .ccard.wide{grid-column:span 2;}
         @media(max-width:780px){.now-combo{grid-template-columns:1fr;}.ccard.feature,.ccard.wide{grid-column:auto;}}
         /* journey — retro CRT */
@@ -231,10 +234,11 @@
         <h2 class="section-title reveal">Now<span class="dot">.</span></h2>
         <p class="section-sub reveal">What I'm building and digging into these days.</p>
         <div class="now-combo">
-            <div class="ccard feature reveal"><div class="cstat green pulse"><span class="d"></span><i>Live</i></div><div class="tg">Teaching</div><div class="tt">PID control, made interactive</div><div class="dd">A teaching demo I built for an autonomous-systems course — drag the PID gains and watch a car steer through a lane change, in real time.</div><a href="rover_control.html" class="more">Try the demo →</a></div>
+            <div class="ccard feature reveal"><canvas class="tile-bg" id="tileRover"></canvas><div class="cstat green pulse"><span class="d"></span><i>Live</i></div><div class="tg">Teaching</div><div class="tt">PID control, made interactive</div><div class="dd">A teaching demo I built for an autonomous-systems course — drag the PID gains and watch a car steer through a lane change, in real time.</div><a href="rover_control.html" class="more">Try the demo →</a></div>
             <div class="ccard reveal"><div class="cstat amber"><span class="d"></span><i>In progress</i></div><div class="tg">Research</div><div class="tt">Multi-agent systems</div><div class="dd">Cooperating agents that hold up under failure and attack.</div></div>
             <div class="ccard reveal"><div class="cstat blue"><span class="d"></span><i>Planned</i></div><div class="tg">Learning</div><div class="tt">ML &amp; RL for control</div><div class="dd">Picking up reinforcement learning and applying it to control.</div></div>
-            <div class="ccard wide reveal"><div class="cstat green"><span class="d"></span><i>Ongoing</i></div><div class="tg">PhD</div><div class="tt">@ GWU · Systems Security Research Group</div><div class="dd">First year — resilience &amp; security of autonomous systems.</div></div>
+            <div class="ccard reveal"><div class="cstat green"><span class="d"></span><i>Ongoing</i></div><div class="tg">PhD</div><div class="tt">@ GWU · Systems Security Research Group</div><div class="dd">First year — resilience &amp; security of autonomous systems.</div></div>
+            <div class="ccard reveal"><canvas class="tile-bg" id="tileLander"></canvas><div class="cstat rose pulse"><span class="d"></span><i>In progress</i></div><div class="tg">Building</div><div class="tt">MultiLander</div><div class="dd">A multi-agent spin on the classic Lunar Lander — thrust, rotate, and land several craft at once.</div><a href="https://bijanmehr.github.io/MultiLander/" target="_blank" class="more">Launch it →</a></div>
         </div>
     </div></section>
 
@@ -417,7 +421,23 @@ if(_lbl&&_pop){_lbl.addEventListener('click',()=>_pop.classList.toggle('open'));
 
 /* runners + loop */
 const runners=[];
-[['lz',lorenzHero],['gl',globeContact]].forEach(d=>{const cv=document.getElementById(d[0]);if(cv){const draw=d[1](cv);runners.push({cv,draw,vis:true});window.addEventListener('resize',()=>fit(cv));}});
+/* pixel-art tile backgrounds for Now cards */
+function pixDraw(x,rows,ox,oy,ps,col){for(let r=0;r<rows.length;r++){const row=rows[r];for(let c=0;c<row.length;c++){const ch=row[c];if(ch==='.'||ch===' ')continue;x.fillStyle=col[ch]||'#888';x.fillRect(ox+c*ps,oy+r*ps,ps,ps);}}}
+const SPR_ROVER=["....E.........","...CCC........","....M.........","....M.SSSSS...","..BBBBBBBBBB..",".BBBBBBBBBBBB.",".BbBBBBBBBBbB.",".BBBBBBBBBBBB.","..T...T...T...",".WoW.WoW.WoW..",".WWW.WWW.WWW.."];
+const COL_ROVER={E:'#a8e6c0',C:'#c8d4cc',M:'#6b7d72',S:'#5fb0a0',B:'#4a5a50',b:'#38463e',T:'#262626',W:'#141414',o:gp(0.05,0.9)};
+const SPR_LANDER=["......D......",".....AAA.....","....AAAAA....","....AWAWA....","...AAAAAAA...","..GGGGGGGGG..",".GgGGGGGGGgG.",".GGGGGGGGGGG.",".GgGGGGGGGgG.","..GGGGNGGGG..",".L...NNN...L.","F.....N.....F"];
+const COL_LANDER={D:'#8a9a90',A:'#5a6b61',a:'#44524a',W:'#a8e6c0',G:'#c79a4a',g:'#9a7636',L:'#6b7d72',F:'#5a6b61',N:'#333333'};
+function roverTile(cv){let x=fit(cv);return ()=>{if(cv.clientWidth&&Math.abs(cv.clientWidth-cv._w)>1)x=fit(cv);const w=cv._w,h=cv._h;x.clearRect(0,0,w,h);const t=performance.now();
+    const ps=Math.max(4,Math.min(7,Math.round(Math.min(w,h)/30))),sw=14*ps,gy=h-9,ox=w-sw-14,period=ps*5,off=(t*0.045)%period;
+    x.fillStyle=gp(0.42,0.4);for(let gx=ox-period;gx<ox+sw+period;gx+=period)x.fillRect(Math.round(gx-off),gy,ps*3,Math.max(2,Math.round(ps*0.4)));
+    pixDraw(x,SPR_ROVER,ox,Math.round(gy-11*ps+Math.sin(t*0.005)*ps*0.5),ps,COL_ROVER);};}
+function landerTile(cv){let x=fit(cv);return ()=>{if(cv.clientWidth&&Math.abs(cv.clientWidth-cv._w)>1)x=fit(cv);const w=cv._w,h=cv._h;x.clearRect(0,0,w,h);const t=performance.now();
+    const ps=Math.max(4,Math.min(7,Math.round(Math.min(w,h)/30))),sw=13*ps,sh=12*ps,ox=w-sw-16,oy=Math.round(h-sh-18+Math.sin(t*0.0016)*ps*0.7);
+    x.fillStyle=gp(0.5,0.45);[[14,16],[34,30],[w-16,18],[w-64,12],[w-30,h-26]].forEach((s,i)=>{if((Math.floor(t/600)+i)%5)x.fillRect(s[0]|0,s[1]|0,2,2);});
+    const ecx=ox+6*ps+ps/2,ey=oy+12*ps,f=Math.floor(t/80)%2;
+    x.fillStyle='#e0903a';x.fillRect(Math.round(ecx-ps),ey,2*ps,Math.round((f?2.2:1.5)*ps));x.fillStyle='#f5d27a';x.fillRect(Math.round(ecx-ps*0.5),ey,Math.round(ps),Math.round((f?1.4:1)*ps));
+    pixDraw(x,SPR_LANDER,ox,oy,ps,COL_LANDER);};}
+[['lz',lorenzHero],['gl',globeContact],['tileRover',roverTile],['tileLander',landerTile]].forEach(d=>{const cv=document.getElementById(d[0]);if(cv){const draw=d[1](cv);runners.push({cv,draw,vis:true});window.addEventListener('resize',()=>fit(cv));}});
 const foxDraw=foxJourney();if(foxDraw)runners.push({cv:document.getElementById('jcv'),draw:foxDraw,vis:true});
 const io=new IntersectionObserver(es=>es.forEach(e=>{const r=runners.find(r=>r.cv===e.target);if(r)r.vis=e.isIntersecting;}),{threshold:0});
 runners.forEach(r=>io.observe(r.cv));
@@ -442,6 +462,7 @@ document.getElementById('year').textContent=new Date().getFullYear();
         ['now2g','.now-combo > div:nth-child(2) .tg'],['now2t','.now-combo > div:nth-child(2) .tt'],['now2d','.now-combo > div:nth-child(2) .dd'],
         ['now3g','.now-combo > div:nth-child(3) .tg'],['now3t','.now-combo > div:nth-child(3) .tt'],['now3d','.now-combo > div:nth-child(3) .dd'],
         ['now4g','.now-combo > div:nth-child(4) .tg'],['now4t','.now-combo > div:nth-child(4) .tt'],['now4d','.now-combo > div:nth-child(4) .dd'],
+        ['now5g','.now-combo > div:nth-child(5) .tg'],['now5t','.now-combo > div:nth-child(5) .tt'],['now5d','.now-combo > div:nth-child(5) .dd'],
         ['pubSub','#publications .section-sub'],
         ['pub1','.pub-list > div:nth-child(1) .pblurb'],['pub2','.pub-list > div:nth-child(2) .pblurb'],
         ['pub3','.pub-list > div:nth-child(3) .pblurb'],['pub4','.pub-list > div:nth-child(4) .pblurb'],
@@ -459,7 +480,7 @@ document.getElementById('year').textContent=new Date().getFullYear();
         if(c.roles&&JSON.stringify(c.roles)!==JSON.stringify(ROLES)){ROLES=c.roles;initTyped();}
         if(c.journey&&window.journeyUpdate)window.journeyUpdate(c.journey);
         if(c.skills){const sk=document.querySelector('.skills');if(sk)sk.innerHTML=c.skills.map(s=>'<span class="skill">'+s+'</span>').join('');}
-        if(c.status)['now1','now2','now3','now4'].forEach((k,i)=>applyStatus(i,c.status[k]));
+        if(c.status)['now1','now2','now3','now4','now5'].forEach((k,i)=>applyStatus(i,c.status[k]));
     }).catch(()=>{});
 })();
 </script>
